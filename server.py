@@ -1,6 +1,6 @@
 """
-TODO
-Script maintenu par Mickaël Schoentgen <contact@tiger-222.fr>.
+GPS Map for Hikers.
+Script maintained by Mickaël Schoentgen <contact@tiger-222.fr>.
 """
 
 import json
