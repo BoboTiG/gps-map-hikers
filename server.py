@@ -58,12 +58,17 @@ def new_trace():
     # /log?lat=49.08291963&lon=6.18369653&alt=256.0&epoch=1615654079&dist=143&speed=0.0
     # alt and dist params are ignored because not reliable
     params = request.query
+
+    file = Path("traces") / CURRENT_TRIP / f"{params.epoch}.json"
+    if file.is_file():
+        # The app sometimes send the same trace several times
+        return
+
     data = {
         "lat": float(params.lat),
         "lon": float(params.lon),
         "speed": float(params.speed),
     }
-    file = Path("traces") / CURRENT_TRIP / f"{params.epoch}.json"
     with file.open(mode="w") as fh:
         json.dump(data, fh)
 
