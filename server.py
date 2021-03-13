@@ -48,7 +48,7 @@ def asset(file):
 
 @route("/", method="GET")
 def home():
-    """Display the home page showing the map."""
+    """Display the home page with the map."""
     return template("home", traces=get_all_traces())
 
 
