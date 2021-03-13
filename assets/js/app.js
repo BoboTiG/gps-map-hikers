@@ -55,7 +55,7 @@ var marker, opt, text,
 
     map = L.map('map', {layers: [osm]}).setView(last.pos, 13),
     number_format = function(number) {
-        return number.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1 ');
+        return number.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1 ').replace(".", ",");
     };
 
 L.control.layers(maps).addTo(map);
