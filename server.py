@@ -1,0 +1,81 @@
+"""
+TODO
+Script maintenu par Mickaël Schoentgen <contact@tiger-222.fr>.
+"""
+
+import json
+import locale
+import sys
+import time
+from pathlib import Path
+
+from bottle import static_file, request, route, run, template
+
+__version__ = "1.0.0"
+__author__ = "Mickaël Schoentgen"
+__copyright__ = """
+Copyright (c) 2021, Mickaël 'Tiger-222' Schoentgen
+
+Permission to use, copy, modify, and distribute this software and its
+documentation for any purpose and without fee or royalty is hereby
+granted, provided that the above copyright notice appear in all copies
+and that both that copyright notice and this permission notice appear
+in supporting documentation or portions thereof, including
+modifications, that you make.
+"""
+
+CURRENT_TRIP = "gr-58"
+
+
+def get_all_traces():
+    """Retrieve all recorded traces."""
+    folder = Path("traces") / CURRENT_TRIP
+    traces = []
+    for file in sorted(folder.glob("*.json")):
+        data = json.loads(file.read_text())
+        data["date"] = time.strftime(
+            "%d/%m/%Y à %H:%M:%S", time.localtime(int(file.stem))
+        )
+        traces.append(data)
+    return traces
+
+
+@route("/assets/<file:path>", method="GET")
+def asset(file):
+    """Get a resource file used by the website."""
+    return static_file(file, root="assets")
+
+
+@route("/", method="GET")
+def home():
+    """Display the home page showing the map."""
+    return template("home", traces=get_all_traces())
+
+
+@route("/log", method="GET")
+def new_trace():
+    """A new trace is sent for recording."""
+    # /log?lat=49.08291963&lon=6.18369653&alt=256.0&epoch=1615654079&dist=143&speed=0.0
+    # alt and dist params are ignored because not reliable
+    params = request.query
+    data = {
+        "lat": float(params.lat),
+        "lon": float(params.lon),
+        "speed": float(params.speed),
+    }
+    file = Path("traces") / CURRENT_TRIP / f"{params.epoch}.json"
+    with file.open(mode="w") as fh:
+        json.dump(data, fh)
+
+
+def main():
+    """Main logic."""
+
+    # Set the locale to the system one for number formatting
+    locale.setlocale(locale.LC_ALL, "")
+
+    run(host="0.0.0.0", port=9999, reloader=True)
+
+
+if __name__ == "__main__":
+    sys.exit(main())
