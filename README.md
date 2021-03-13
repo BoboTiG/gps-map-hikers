@@ -4,7 +4,7 @@ Beautiful map using [Leaflet](https://leafletjs.com/) and [GPSLogger](https://gi
 
 ## Installation
 
-```shell
+```bash
 python -m pip install -r requirements.txt
 ```
 
@@ -12,6 +12,6 @@ python -m pip install -r requirements.txt
 
 With a hammer:
 
-```shell
+```bash
 while true; do python server.py || true; done
-````
+```
