@@ -63,18 +63,18 @@ L.control.layers(maps).addTo(map);
 positions.forEach(function(position) {
     journey.push(position.pos);
 
-    opt = {icon: blue};
+    opt = {icon: yellow};
     text = '';
     if (position == last) {
         opt = {icon: green}
         text = '<p style="text-align:center">Nous en sommes là !<br>';
     } else if (position.text) {
-        opt = {icon: yellow}
+        opt = {icon: blue}
         text = '<p style="text-align:center">' + position.text + '<br>';
     }
     marker = L.marker(position.pos, opt).addTo(map);
     marker.bindPopup(text + '<small>' + position.date + '</small></p>')
-     if (position == last) {
+    if (position == last) {
         marker.openPopup();
     }
 });
