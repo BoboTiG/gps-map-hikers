@@ -2,6 +2,7 @@
 
 `2023-07-17`
 
+- Improve map rendering with lot of markers (related to #1).
 - improve the marker bubble design.
 - Display altitude in marker's text (closes #4).
 - Display the total distance on each marker (closes #2).

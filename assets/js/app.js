@@ -33,19 +33,27 @@ var marker, opt, text,
     attrib = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     osm = L.tileLayer(
        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: attrib
+        attribution: attrib,
+        updateWhenZooming: false,
+        updateWhenIdle: true,
     }),
     osm_hot = L.tileLayer(
         'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
-        attribution: attrib
+        attribution: attrib,
+        updateWhenZooming: false,
+        updateWhenIdle: true,
     }),
     watercolor = L.tileLayer(
         'http://{s}.tile.stamen.com/watercolor/{z}/{x}/{y}.jpg', {
-        attribution: attrib + ', map tiles by <a href="http://stamen.com">Stamen Design</a>'
+        attribution: attrib + ', map tiles by <a href="http://stamen.com">Stamen Design</a>',
+        updateWhenZooming: false,
+        updateWhenIdle: true,
     }),
     cartoon = L.tileLayer(
         'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
-        attribution: attrib + ', map tiles bt <a href="http://cartodb.com/attributions">CartoDB</a>'
+        attribution: attrib + ', map tiles bt <a href="http://cartodb.com/attributions">CartoDB</a>',
+        updateWhenZooming: false,
+        updateWhenIdle: true,
     }),
     maps = {
         'OpenStreetMap': osm,
@@ -54,7 +62,7 @@ var marker, opt, text,
         'Watercolor': watercolor,
     },
 
-    map = L.map('map', {layers: [osm]}).setView(last.pos, 13),
+    map = L.map('map', {layers: [osm], preferCanvas: true}).setView(last.pos, 13),
     number_format = function(number) {
         return number.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1 ').replace(".", ",");
     };
