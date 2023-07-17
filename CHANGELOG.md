@@ -3,9 +3,9 @@
 `2023-07-17`
 
 - Improve map rendering with lot of markers (related to #1).
-- improve the marker bubble design.
-- Display altitude in marker's text (closes #4).
 - Display the total distance on each marker (closes #2).
+- Display altitude in marker's text (closes #4).
+- Improve the marker bubble design.
 - [dev] Upgrade JS dependency `leaflet` from `1.7.1` to `1.9.4`.
 - [dev] Upgrade JS dependency `leaflet-routing-machine` from `3.2.0` to `3.2.12`.
 - [dev] Upgrade Python dependency `bottle` from `0.12.19` to `0.12.25`.
