@@ -1,5 +1,6 @@
 var marker, opt, text,
     journey = [],
+    first = positions[0],
     last = positions[positions.length - 1],
 
     // Icônes
@@ -61,21 +62,30 @@ var marker, opt, text,
 L.control.layers(maps).addTo(map);
 
 positions.forEach(function(position) {
-    journey.push(position.pos);
-
-    opt = {icon: yellow};
+    opt = {icon: blue};
     text = '<p style="text-align:center">';
-    if (position == last) {
-        opt = {icon: green}
-        text += 'Nous en sommes là !';
-    } else if (position.speed) {
-        opt = {icon: blue}
-        text += '<br>~' + position.speed + ' km/s';
-        if (position.alt) {
-            text += '<br>⛰' + position.alt + ' m';
-        }
+    if (position == first) {
+        opt = {icon: yellow};
+        text += '<b>Point de départ</b> 🚦';
+    } else if (position == last) {
+        opt = {icon: green};
+        text += '<b>Nous en sommes là !</b>';
+    } else if (!position.pos.speed && !position.pos.alt && !position.pos.dist) {
+        return true;
     }
-    text += '<br><small>' + position.date + '</small></p>'
+
+    if (position.pos.speed) {
+        text += '<br>🚀 ' + position.pos.speed + ' km/s';
+    }
+    if (position.pos.alt) {
+        text += '<br>⛰ ' + position.pos.alt + ' m';
+    }
+    if (position.pos.dist) {
+        text += '<br>🚩 ' + position.pos.dist + ' m';
+    }
+    text += '<br><br><small>' + position.date + '</small></p>';
+
+    journey.push(position.pos);
 
     marker = L.marker(position.pos, opt).addTo(map);
     marker.bindPopup(text);
