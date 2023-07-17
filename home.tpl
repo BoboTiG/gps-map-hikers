@@ -28,7 +28,7 @@
 <script>
     var positions = [
     %for trace in traces:
-        {date: "{{ trace["date"] }}", pos: {lat: {{ trace["lat"] }}, lon: {{ trace["lon"] }}}, text: "~ {{ trace["speed"] }} km/h"},
+        {date: "{{ trace["date"] }}", pos: { lat: {{ trace["lat"] }}, lon: {{ trace["lon"] }}, alt: {{ trace["alt"] }}, speed: {{ trace["speed"] }} } },
     %end
     ];
 </script>

@@ -64,16 +64,21 @@ positions.forEach(function(position) {
     journey.push(position.pos);
 
     opt = {icon: yellow};
-    text = '';
+    text = '<p style="text-align:center">';
     if (position == last) {
         opt = {icon: green}
-        text = '<p style="text-align:center">Nous en sommes là !<br>';
-    } else if (position.text) {
+        text += 'Nous en sommes là !';
+    } else if (position.speed) {
         opt = {icon: blue}
-        text = '<p style="text-align:center">' + position.text + '<br>';
+        text += '<br>~' + position.speed + ' km/s';
+        if (position.alt) {
+            text += '<br>⛰' + position.alt + ' m';
+        }
     }
+    text += '<br><small>' + position.date + '</small></p>'
+
     marker = L.marker(position.pos, opt).addTo(map);
-    marker.bindPopup(text + '<small>' + position.date + '</small></p>')
+    marker.bindPopup(text);
     if (position == last) {
         marker.openPopup();
     }
