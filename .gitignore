@@ -1,3 +1,5 @@
 .DS_Store
+traces/*/*.json
+traces/*/*.log
 .vscode/
 venv/
