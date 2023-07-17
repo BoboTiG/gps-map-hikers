@@ -9,7 +9,7 @@ import sys
 import time
 from pathlib import Path
 
-from bottle import static_file, request, route, run, template
+from bottle import request, route, run, static_file, template
 
 __version__ = "1.0.0"
 __author__ = "Mickaël Schoentgen"

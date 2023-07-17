@@ -4,8 +4,19 @@ Beautiful map using [Leaflet](https://leafletjs.com/) and [GPSLogger](https://gi
 
 ## Installation
 
-```bash
-python -m pip install -r requirements.txt
+```console
+$ python3.11 -m venv venv
+$ . venv/bin/activate
+$ python -m pip install -U pip
+$ python -m pip install -r requirements-dev.txt
+```
+
+## Development
+
+```console
+$ python -m isort server.py
+$ python -m black server.py
+$ python -m flake8 server.py
 ```
 
 ## Running the Server
