@@ -91,6 +91,6 @@ var route = L.Routing.control({
 }).addTo(map);
 
 route.on('routesfound', function(e) {
-    var distance = e.routes[0].summary.totalDistance;
+    const distance = e.routes[0].summary.totalDistance;
     console.log('Distance totale parcourue :', number_format(distance / 1000), 'km.');
 });
