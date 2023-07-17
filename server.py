@@ -24,7 +24,7 @@ in supporting documentation or portions thereof, including
 modifications, that you make.
 """
 
-CURRENT_TRIP = "gr-58"
+CURRENT_TRIP = "2023-pyrenees"
 
 
 def get_all_traces():
