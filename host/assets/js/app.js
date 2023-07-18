@@ -5,7 +5,7 @@ var journey = [],
     new_icon = function(color, size) {
         return new L.Icon({
             iconUrl: 'assets/css/images/marker-' + color + '.png',
-            shadowUrl: 'assets/css/images/marker-shadow.png',
+            shadowUrl: '',
             iconSize: size == 'small' ? [18, 30] : [25, 41],
             iconAnchor: size == 'small' ? [12, 30] : [12, 41],
             popupAnchor: size == 'small' ? [-2, -24] : [1, -34],

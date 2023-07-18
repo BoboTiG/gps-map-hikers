@@ -2,7 +2,7 @@
 
 `2023-07-17`
 
-- Improve map rendering with lot of markers (related to #1).
+- Improve map rendering with lot of markers (closes #1).
 - Display the total distance on each marker (closes #2).
 - Capability to fire a SOS signal (closes #3).
 - Display altitude in marker's text (closes #4).
