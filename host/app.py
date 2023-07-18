@@ -7,7 +7,7 @@ import json
 import time
 from pathlib import Path
 
-from bottle import default_app, request, route, static_file, template
+from bottle import default_app, redirect, request, route, static_file, template
 
 __version__ = "1.1.0"
 __author__ = "Mickaël Schoentgen"
@@ -192,6 +192,7 @@ def new_trace():
 def emergency_done():
     """Stop the SOS signal."""
     SOS.unlink(missing_ok=True)
+    redirect("/")
 
 
 @route("/sos", method="GET")
@@ -199,6 +200,7 @@ def emergency():
     """Start a SOS signal."""
     if not emergency_ongoing():
         SOS.write_text(time.strftime("%d/%m/%Y à %H:%M:%S", time.localtime(time.time())))
+    redirect("/")
 
 
 application = default_app()

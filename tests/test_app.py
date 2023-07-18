@@ -1,6 +1,8 @@
 from unittest.mock import patch
 
+import pytest
 from boddle import boddle
+from bottle import HTTPResponse
 
 from host.app import asset, emergency, emergency_done, emergency_ongoing, home, new_trace, robots
 
@@ -26,10 +28,12 @@ def test_robots():
 def test_emergency():
     assert not emergency_ongoing()
 
-    emergency()
+    with pytest.raises(HTTPResponse):
+        emergency()
     assert emergency_ongoing()
 
-    emergency_done()
+    with pytest.raises(HTTPResponse):
+        emergency_done()
     assert not emergency_ongoing()
 
 
