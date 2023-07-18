@@ -23,7 +23,7 @@ var journey = [],
 
     // Cartes
     attrib = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    title_layer_options = {maxZoom: 22, updateWhenZooming: false, updateWhenIdle: true},
+    title_layer_options = {maxZoom: 19, updateWhenZooming: false, updateWhenIdle: true},
     maps = {
         'OpenStreetMap': L.tileLayer(
             'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
