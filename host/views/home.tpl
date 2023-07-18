@@ -19,6 +19,17 @@
      <a href="https://www.openstreetmap.org/?mlat={{ traces[-1]["lat"] }}&mlon={{ traces[-1]["lon"] }}#map=16/{{ traces[-1]["lat"] }}/{{ traces[-1]["lon"] }}" target="_blank">Coordonnées</a> : lat/lon {{ traces[-1]["lat"] }} {{ traces[-1]["lon"] }}
 </div>
 %end
+<div id="legend">
+    🚀 Vitesse de marche
+    <br>
+    ⛰ Altitude (à peu près)
+    <br>
+    ⛳ Distance parcourue depuis le dernier <img src="assets/css/images/marker-blue.png">
+    <br>
+    🚩 Distance parcourue depuis le dernier <img src="assets/css/images/marker-yellow.png">
+    <br>
+    🏁 Distance totale parcourue
+</div>
 <div id="map"></div>
 
 <script>

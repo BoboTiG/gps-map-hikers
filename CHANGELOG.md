@@ -7,6 +7,7 @@
 - Capability to fire a SOS signal (closes #3).
 - Display altitude in marker's text (closes #4).
 - Improve the marker bubble design.
+- Add a nice legend.
 - Allow to zoom even more to see all details.
 - Adjust the code to fit into PythonAnywhere hosting.
 - Set a generic website title (*Trek*).
