@@ -73,11 +73,11 @@ traces.forEach(function(trace) {
     } else if (trace.type == 'sos-past') {
         text += '<b>🦺 Hors de danger !</b><br>';
     } else if (trace.type == 'start') {
-        text += '<b>Top départ !</b> 🚥';
+        text += '<b>Top départ !</b> 🚥<br>';
     } else if (trace.type == 'end') {
-        text += '<b>Nous en sommes là !</b>';
+        text += '<b>Nous en sommes là !</b><br>';
     } else if (trace.type == 'pause') {
-        text += '<b>Et c’est reparti !</b> 🚦';
+        text += '<b>Et c’est reparti !</b> 🚦<br>';
     }
 
     if (trace.speed) {
