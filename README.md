@@ -31,5 +31,5 @@ $ ./checks.sh
 ### Local Server
 
 ```console
-python server.py
+$ python server.py
 ```
