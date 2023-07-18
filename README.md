@@ -28,6 +28,12 @@ $ python -m pip install -r requirements-dev.txt
 $ ./checks.sh
 ```
 
+### Tests
+
+```console
+$ python -m pytest
+```
+
 ### Local Server
 
 ```console

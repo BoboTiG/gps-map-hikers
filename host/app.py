@@ -7,7 +7,7 @@ import json
 import time
 from pathlib import Path
 
-from bottle import default_app, redirect, request, route, static_file, template
+from bottle import default_app, request, route, static_file, template
 
 __version__ = "1.1.0"
 __author__ = "Mickaël Schoentgen"
@@ -34,9 +34,7 @@ def get_all_traces(folder=CURRENT_TRIP):
     traces = []
     for file in sorted(folder.glob("*.json")):
         data = json.loads(file.read_text())
-        data["date"] = time.strftime(
-            "%d/%m/%Y à %H:%M:%S", time.localtime(int(file.stem))
-        )
+        data["date"] = time.strftime("%d/%m/%Y à %H:%M:%S", time.localtime(int(file.stem)))
         traces.append(data)
     return adapt_traces(traces)
 
@@ -47,16 +45,19 @@ def adapt_traces(traces):
     Traces without relevant data are ignored.
 
     Trace data:
-        - date
-        - type: start | end | pause | in-between | sos-past | sos
-        - dist: distance since last trace
-        - tdist: total distance since the begining
-        - tdist2: total distance since the pause, or the begining if none
-        - speed
         - alt: altitude
+        - date
+        - dist: distance since last trace
         - lat: latitude
         - lon: longitude
+        - speed
+        - tdist: total distance since the begining
+        - tdist2: total distance since the pause, or the begining if none
+        - type: start | end | pause | in-between | sos-past | sos
     """
+    if not traces:
+        return traces
+
     fmt_traces = []
     total_distance = 0.0
     total_distance_since_last_pause = 0.0
@@ -64,17 +65,14 @@ def adapt_traces(traces):
 
     for trace in traces:
         fmt_trace = {
+            "alt": trace["alt"],
             "date": trace["date"],
             "lat": trace["lat"],
             "lon": trace["lon"],
-            "alt": trace["alt"],
             "dist": 0.0,
             "speed": 0.0,
             "tdist": 0.0,
             "tdist2": 0.0,
-            "_sos": trace.get(
-                "sos", False
-            ),  # Temporary, will be filtered in check_for_sos()
         }
 
         if trace == first:
@@ -88,17 +86,19 @@ def adapt_traces(traces):
             total_distance_since_last_pause += trace["dist"]
             fmt_trace["dist"] = trace["dist"]
             fmt_trace["tdist"] = total_distance
+            fmt_trace["tdist2"] = total_distance_since_last_pause
             fmt_trace["speed"] = trace["speed"]
 
-            if trace == last:
+            if trace["sos"]:
+                # Emergency!
+                fmt_trace["type"] = "sos"
+            elif trace == last:
                 # Last trace
                 fmt_trace["type"] = "end"
-                fmt_trace["tdist2"] = total_distance_since_last_pause
                 total_distance_since_last_pause = 0.0
             elif not trace["dist"]:
                 # Continuing the trip, maybe after the night, or a long pause
                 fmt_trace["type"] = "pause"
-                fmt_trace["tdist2"] = total_distance_since_last_pause
                 total_distance_since_last_pause = 0.0
             else:
                 # Normal trace, we are moving
@@ -114,14 +114,19 @@ def check_for_sos(traces):
     Adapt traces for emergencies.
 
     Trace data that may be updated:
-        - type: sos-past | sos
+        - type: sos-past
     """
-    for idx in range(len(traces)):
-        if traces[idx].pop("_sos"):
-            if idx == len(traces) - 1 or traces[idx + 1]["_sos"]:
-                traces[idx]["type"] = "sos"
-            else:
-                traces[idx]["type"] = "sos-past"
+    start = -1
+    for idx, trace in enumerate(traces):
+        if trace["type"] == "sos":
+            if start == -1:
+                start = idx
+            continue
+        if start > -1:
+            for i in range(start, idx):
+                traces[i]["type"] = "sos-past"
+            start = -1
+
     return traces
 
 
@@ -181,17 +186,13 @@ def new_trace():
 def emergency_done():
     """Stop the SOS signal."""
     SOS.unlink(missing_ok=True)
-    redirect("/")
 
 
 @route("/sos", method="GET")
 def emergency():
     """Start a SOS signal."""
     if not emergency_ongoing():
-        SOS.write_text(
-            time.strftime("%d/%m/%Y à %H:%M:%S", time.localtime(time.time()))
-        )
-    redirect("/")
+        SOS.write_text(time.strftime("%d/%m/%Y à %H:%M:%S", time.localtime(time.time())))
 
 
 application = default_app()

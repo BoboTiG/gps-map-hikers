@@ -1,5 +1,8 @@
 black
+boddle
 bottle==0.12.25
 flake8-pyproject
 isort
 paste==3.5.3
+pytest
+pytest-cov
