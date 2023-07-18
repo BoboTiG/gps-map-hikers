@@ -40,13 +40,15 @@ abbr:hover {
 }
 
 #legend {
-    border: 1px inset goldenrod;
+    border-top: 1px inset goldenrod;
+    border-right: 1px inset goldenrod;
     position: absolute;
     bottom: 0;
     z-index: 10000;
     padding: 0.5em;
     background-color: rgba(255, 255, 255, 0.5);
     font-size: 0.8em;
+    border-top-right-radius: 0.5em;
 }
 
 #legend img {
