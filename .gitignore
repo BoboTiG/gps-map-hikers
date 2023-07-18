@@ -1,6 +1,7 @@
 .coverage
 .DS_Store
 __pycache__/
+host/sos
 host/traces/*/*.json
 host/traces/*/*.log
 .vscode/

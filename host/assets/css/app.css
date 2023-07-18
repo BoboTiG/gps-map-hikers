@@ -5,8 +5,18 @@ body,
     width: 100vw;
 }
 
+@font-face {
+    font-family: 'Victor Mono Medium';
+    src: local('Victor Mono Medium'), local('VictorMono-Light'), url("../font/VictorMono-Medium.woff2") format("woff2");
+}
+
 body {
     margin: 0;
+}
+
+body,
+#map * {
+    font-family: "Victor Mono Medium";
 }
 
 abbr:hover {
