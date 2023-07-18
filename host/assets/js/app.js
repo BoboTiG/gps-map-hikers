@@ -1,7 +1,8 @@
-var marker, opt, text,
-    journey = [],
+var journey = [],
     first = positions[0],
     last = positions[positions.length - 1],
+    previous_distance = 0.0,
+    total_distance = 0.0,
 
     // Icônes
     green = new L.Icon({
@@ -61,48 +62,65 @@ var marker, opt, text,
         'Carto': cartoon,
         'Watercolor': watercolor,
     },
-
     map = L.map('map', {layers: [osm], preferCanvas: true}).setView(last.pos, 13),
+    is_int = function(n) {
+        return n % 1 === 0;
+    },
     number_format = function(number) {
-        return number.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1 ').replace(".", ",");
+        let value = number.toFixed(is_int(number) ? 0: 2 ); 
+        return value.replace(/(\d)(?=(\d{3})+\.)/g, '$1 ').replace(".", ",");
     };
 
 L.control.layers(maps).addTo(map);
 
 positions.forEach(function(position) {
-    opt = {icon: blue};
-    text = '<p style="text-align:center">';
+    let opt = {icon: blue},
+        text = '<p style="text-align:center">';
+
     if (position == first) {
+        // Premier marqueur
         opt = {icon: yellow};
-        text += '<b>Top départ !</b> 🚦';
+        text += '<b>Top départ !</b> 🚥';
     } else if (position == last) {
+        // Dernier marqueur
         opt = {icon: green};
         text += '<b>Nous en sommes là !</b>';
     } else if (!position.pos.speed && !position.pos.alt && !position.pos.dist) {
+        // Auncune information, on zappe
         return true;
+    } else if (!position.pos.dist) {
+        // On repart, sûrement après une longue pause (genre le lendemain)
+        opt = {icon: yellow};
+        text += '<b>Et c’est reparti !</b> 🚦';
     }
-
-    if (position.pos.speed) {
-        text += '<br>🚀 ' + position.pos.speed + ' km/s';
-    }
-    if (position.pos.alt) {
-        text += '<br>⛰ ' + position.pos.alt + ' m';
-    }
-    if (position.pos.dist) {
-        text += '<br>🚩 ' + position.pos.dist + ' m';
-    }
-    text += '<br><br><small>' + position.date + '</small></p>';
 
     journey.push(position.pos);
 
-    marker = L.marker(position.pos, opt).addTo(map);
+    if (position.pos.speed) {
+        text += '<br>🚀 ' + number_format(position.pos.speed) + ' km/h';
+    }
+    if (position.pos.alt) {
+        text += '<br>⛰ ' + number_format(parseInt(position.pos.alt)) + ' m';
+    }
+    if (position.pos.dist) {
+        previous_distance = position.pos.dist;
+        text += '<br>🚩 ' + number_format((total_distance + position.pos.dist) / 1000) + ' km';
+    } else if (!position.pos.dist || position == last) {
+        total_distance += previous_distance;
+        if (total_distance) {
+            text += '<br>🚩 ' + number_format(total_distance / 1000) + ' km';
+        }
+    }
+    text += '<br><br><small>' + position.date + '</small></p>';
+
+    let marker = L.marker(position.pos, opt).addTo(map);
     marker.bindPopup(text);
     if (position == last) {
         marker.openPopup();
     }
 });
 
-var route = L.Routing.control({
+L.Routing.control({
     waypoints: journey,
     addWaypoints: false,  // Ne pas créer de nouveaux points lors d'un clic sur le trajet
     createMarker: function() {},  // Ne pas remplacer nos icônes
@@ -112,8 +130,3 @@ var route = L.Routing.control({
                  {color: 'blue', opacity: 0.4, weight: 3}]
     },
 }).addTo(map);
-
-route.on('routesfound', function(e) {
-    const distance = e.routes[0].summary.totalDistance;
-    console.log('Distance totale parcourue :', number_format(distance / 1000), 'km.');
-});
