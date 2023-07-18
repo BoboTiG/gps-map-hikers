@@ -141,6 +141,12 @@ def asset(file):
     return static_file(file, root=ASSETS)
 
 
+@route("/robots.txt", method="GET")
+def robots():
+    """Get the robots.txt file (for search engine crawlers)."""
+    return static_file("robots.txt", root=ROOT)
+
+
 @route("/", method="GET")
 def home():
     """Display the home page with the map."""

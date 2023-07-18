@@ -2,7 +2,7 @@ from unittest.mock import patch
 
 from boddle import boddle
 
-from host.app import asset, emergency, emergency_done, emergency_ongoing, home, new_trace
+from host.app import asset, emergency, emergency_done, emergency_ongoing, home, new_trace, robots
 
 
 def test_asset():
@@ -15,6 +15,12 @@ def test_home():
     content = home()
     assert "<title>Trek</title>" in content
     assert "var traces = [" in content
+
+
+def test_robots():
+    response = robots()
+    assert response.status_code == 200
+    assert response.content_type == "text/plain; charset=UTF-8"
 
 
 def test_emergency():

@@ -12,6 +12,7 @@
 - Adjust the code to fit into PythonAnywhere hosting.
 - Set a generic website title (*Trek*).
 - Use a cool font family for the website ([Victor Mono](https://rubjo.github.io/victor-mono/))
+- Prevent search engine crawlers to browse the website.
 - Moved the traces logic from JS to Python.
 - [dev] Keep a copy of the marker icon source.
 - [dev] Introduce developement dependencies to lint, and test, the code.
