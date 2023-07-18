@@ -6,6 +6,7 @@
 - Display the total distance on each marker (closes #2).
 - Display altitude in marker's text (closes #4).
 - Improve the marker bubble design.
+- Allow to zoom even more to see all details.
 - Adjust the code to fit into PythonAnywhere hosting.
 - [dev] Upgrade JS dependency `leaflet` from `1.7.1` to `1.9.4`.
 - [dev] Upgrade JS dependency `leaflet-routing-machine` from `3.2.0` to `3.2.12`.

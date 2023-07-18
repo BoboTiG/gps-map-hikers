@@ -32,29 +32,26 @@ var journey = [],
 
     // Cartes
     attrib = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    title_layer_options = {maxZoom: 22, updateWhenZooming: false, updateWhenIdle: true},
     osm = L.tileLayer(
        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: attrib,
-        updateWhenZooming: false,
-        updateWhenIdle: true,
+        ...title_layer_options,
     }),
     osm_hot = L.tileLayer(
         'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
         attribution: attrib,
-        updateWhenZooming: false,
-        updateWhenIdle: true,
+        ...title_layer_options,
     }),
     watercolor = L.tileLayer(
         'http://{s}.tile.stamen.com/watercolor/{z}/{x}/{y}.jpg', {
         attribution: attrib + ', map tiles by <a href="http://stamen.com">Stamen Design</a>',
-        updateWhenZooming: false,
-        updateWhenIdle: true,
+        ...title_layer_options,
     }),
     cartoon = L.tileLayer(
         'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
         attribution: attrib + ', map tiles bt <a href="http://cartodb.com/attributions">CartoDB</a>',
-        updateWhenZooming: false,
-        updateWhenIdle: true,
+        ...title_layer_options,
     }),
     maps = {
         'OpenStreetMap': osm,
@@ -67,7 +64,7 @@ var journey = [],
         return n % 1 === 0;
     },
     number_format = function(number) {
-        let value = number.toFixed(is_int(number) ? 0: 2 ); 
+        let value = number.toFixed(is_int(number) ? 0 : 2 ); 
         return value.replace(/(\d)(?=(\d{3})+\.)/g, '$1 ').replace(".", ",");
     };
 
