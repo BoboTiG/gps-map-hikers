@@ -1,5 +1,6 @@
 .DS_Store
-traces/*/*.json
-traces/*/*.log
+__pycache__/
+host/traces/*/*.json
+host/traces/*/*.log
 .vscode/
 venv/

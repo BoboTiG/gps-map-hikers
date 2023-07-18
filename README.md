@@ -2,7 +2,18 @@
 
 Beautiful map using [Leaflet](https://leafletjs.com/) and [GPSLogger](https://github.com/mendhak/gpslogger).
 
-## Installation
+## Production
+
+Copy all files from the `host` folder to the [PythonAnywhere](https://www.pythonanywhere.com) hosting account.
+
+Details:
+- Python version: `3.10`
+- Force HTTPS: enabled
+- Web app type: Bottle
+
+## Development
+
+### Installation
 
 ```console
 $ python3.11 -m venv venv
@@ -11,18 +22,14 @@ $ python -m pip install -U pip
 $ python -m pip install -r requirements-dev.txt
 ```
 
-## Development
+### Quality
 
 ```console
-$ python -m isort server.py
-$ python -m black server.py
-$ python -m flake8 server.py
+$ ./checks.sh
 ```
 
-## Running the Server
+### Local Server
 
-With a hammer:
-
-```bash
-while true; do python server.py || true; done
+```console
+python server.py
 ```

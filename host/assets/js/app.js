@@ -74,7 +74,7 @@ positions.forEach(function(position) {
     text = '<p style="text-align:center">';
     if (position == first) {
         opt = {icon: yellow};
-        text += '<b>Point de départ</b> 🚦';
+        text += '<b>Top départ !</b> 🚦';
     } else if (position == last) {
         opt = {icon: green};
         text += '<b>Nous en sommes là !</b>';

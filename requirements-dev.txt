@@ -2,3 +2,4 @@
 black
 flake8-pyproject
 isort
+paste==3.5.3
