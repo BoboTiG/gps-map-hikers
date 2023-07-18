@@ -8,6 +8,7 @@
 - Improve the marker bubble design.
 - Allow to zoom even more to see all details.
 - Adjust the code to fit into PythonAnywhere hosting.
+- Set a generic website title (*Trek*)
 - [dev] Upgrade JS dependency `leaflet` from `1.7.1` to `1.9.4`.
 - [dev] Upgrade JS dependency `leaflet-routing-machine` from `3.2.0` to `3.2.12`.
 - [dev] Upgrade Python dependency `bottle` from `0.12.19` to `0.12.25`.
