@@ -24,9 +24,9 @@
     <br>
     ⛰ Altitude (à peu près)
     <br>
-    ⛳ Distance parcourue depuis le dernier <img src="assets/css/images/marker-blue.png">
+    ⛳ Distance parcourue depuis le <abbr title="Un marqueur bleu représente un relevé GPS.">dernier <img src="assets/css/images/marker-blue.png"></abbr>
     <br>
-    🚩 Distance parcourue depuis le dernier <img src="assets/css/images/marker-yellow.png">
+    🚩 Distance parcourue depuis le <abbr title="Un marqueur jaune représente une pause longue, du genre une nuit au frais.">dernier <img src="assets/css/images/marker-yellow.png"></abbr>
     <br>
     🏁 Distance totale parcourue
 </div>

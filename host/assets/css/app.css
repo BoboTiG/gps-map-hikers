@@ -9,6 +9,10 @@ body {
     margin: 0;
 }
 
+abbr:hover {
+    cursor: help;
+}
+
 ::selection {
     color: #222;
     background: orange;
