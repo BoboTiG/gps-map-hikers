@@ -10,12 +10,21 @@
 </head>
 
 <body>
+%if emergency_ongoing:
+<div class="sos">
+    <b class="blink">🆘</b> Entrez en contact avec nous au plus vite&nbsp;!
+    <br>
+    Date d’émission du signal : {{ traces[-1]["date"] }}
+    <br>
+     <a href="https://www.openstreetmap.org/?mlat={{ traces[-1]["lat"] }}&mlon={{ traces[-1]["lon"] }}#map=16/{{ traces[-1]["lat"] }}/{{ traces[-1]["lon"] }}" target="_blank">Coordonnées</a> : lat/lon {{ traces[-1]["lat"] }} {{ traces[-1]["lon"] }}
+</div>
+%end
 <div id="map"></div>
 
 <script>
-    var positions = [
+    var traces = [
     %for trace in traces:
-        { date: "{{ trace["date"] }}", pos: { lat: {{ trace["lat"] }}, lon: {{ trace["lon"] }}, alt: {{ trace["alt"] }}, speed: {{ trace["speed"] }}, dist: {{ trace["dist"] }} } },
+        { date: "{{ trace["date"] }}", type: "{{ trace["type"] }}", lat: {{ trace["lat"] }}, lon: {{ trace["lon"] }}, alt: {{ trace["alt"] }}, speed: {{ trace["speed"] }}, dist: {{ trace["dist"] }}, tdist: {{ trace["tdist"] }}, tdist2: {{ trace["tdist2"] }} },
     %end
     ];
 </script>

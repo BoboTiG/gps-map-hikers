@@ -1,65 +1,56 @@
 var journey = [],
-    first = positions[0],
-    last = positions[positions.length - 1],
-    previous_distance = 0.0,
-    total_distance = 0.0,
+    last = traces[traces.length - 1],
 
     // Icônes
-    green = new L.Icon({
-        iconUrl: 'assets/css/images/marker-icon-2x-green.png',
-        shadowUrl: 'assets/css/images/marker-shadow.png',
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34],
-        shadowSize: [41, 41]
-    }),
-    yellow = new L.Icon({
-        iconUrl: 'assets/css/images/marker-icon-2x-yellow.png',
-        shadowUrl: 'assets/css/images/marker-shadow.png',
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34],
-        shadowSize: [41, 41]
-    }),
-    blue = new L.Icon({
-        iconUrl: 'assets/css/images/marker-icon-2x.png',
-        shadowUrl: 'assets/css/images/marker-shadow.png',
-        iconSize: [18, 30],
-        iconAnchor: [12, 30],
-        popupAnchor: [-2, -24],
-        shadowSize: [30, 30]
-    }),
+    new_icon = function(color, size) {
+        return new L.Icon({
+            iconUrl: 'assets/css/images/marker-' + color + '.png',
+            shadowUrl: 'assets/css/images/marker-shadow.png',
+            iconSize: size == 'small' ? [18, 30] : [25, 41],
+            iconAnchor: size == 'small' ? [12, 30] : [12, 41],
+            popupAnchor: size == 'small' ? [-2, -24] : [1, -34],
+            shadowSize: size == 'small' ? [30, 30] : [41, 41]
+        });
+    },
+    marker_color = {
+        "end": new_icon('green', 'normal'),
+        "in-between": new_icon('blue', 'small'),
+        "pause": new_icon('yellow', 'small'),
+        "start": new_icon('yellow', 'normal'),
+        "sos": new_icon('red', 'normal'),
+        "sos-past": new_icon('red', 'small'),
+    },
 
     // Cartes
     attrib = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     title_layer_options = {maxZoom: 22, updateWhenZooming: false, updateWhenIdle: true},
-    osm = L.tileLayer(
-       'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: attrib,
-        ...title_layer_options,
-    }),
-    osm_hot = L.tileLayer(
-        'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
-        attribution: attrib,
-        ...title_layer_options,
-    }),
-    watercolor = L.tileLayer(
-        'http://{s}.tile.stamen.com/watercolor/{z}/{x}/{y}.jpg', {
-        attribution: attrib + ', map tiles by <a href="http://stamen.com">Stamen Design</a>',
-        ...title_layer_options,
-    }),
-    cartoon = L.tileLayer(
-        'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
-        attribution: attrib + ', map tiles bt <a href="http://cartodb.com/attributions">CartoDB</a>',
-        ...title_layer_options,
-    }),
     maps = {
-        'OpenStreetMap': osm,
-        'OpenStreetMap II': osm_hot,
-        'Carto': cartoon,
-        'Watercolor': watercolor,
+        'OpenStreetMap': L.tileLayer(
+            'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: attrib,
+                ...title_layer_options,
+            }
+        ),
+        'OpenStreetMap II': L.tileLayer(
+            'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+                attribution: attrib,
+                ...title_layer_options,
+            }
+        ),
+        'CartoDB': L.tileLayer(
+            'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+                attribution: attrib + ', map tiles bt <a href="http://cartodb.com/attributions">CartoDB</a>',
+                ...title_layer_options,
+            }
+        ),
+        'Watercolor': L.tileLayer(
+            'http://{s}.tile.stamen.com/watercolor/{z}/{x}/{y}.jpg', {
+                attribution: attrib + ', map tiles by <a href="http://stamen.com">Stamen Design</a>',
+                ...title_layer_options,
+            }
+        ),
     },
-    map = L.map('map', {layers: [osm], preferCanvas: true}).setView(last.pos, 13),
+    map = L.map('map', {layers: maps['OpenStreetMap'], preferCanvas: true}).setView({lat: last.lat, lon: last.lon}, 13),
     is_int = function(n) {
         return n % 1 === 0;
     },
@@ -70,49 +61,45 @@ var journey = [],
 
 L.control.layers(maps).addTo(map);
 
-positions.forEach(function(position) {
-    let opt = {icon: blue},
-        text = '<p style="text-align:center">';
+traces.forEach(function(trace) {
+    const position = {lat: trace.lat, lon: trace.lon};
+    let text = '<p style="text-align:center">';
 
-    if (position == first) {
-        // Premier marqueur
-        opt = {icon: yellow};
+    journey.push(position);
+
+    if (trace.type == 'sos') {
+        text += '<b class="blink red">SOS</b><br>';
+        text += 'Lat/Lon : ' + position.lat.toFixed(4) + ' / ' + position.lon.toFixed(4) + '<br>';
+    } else if (trace.type == 'sos-past') {
+        text += '<b>🦺 Hors de danger !</b><br>';
+    } else if (trace.type == 'start') {
         text += '<b>Top départ !</b> 🚥';
-    } else if (position == last) {
-        // Dernier marqueur
-        opt = {icon: green};
+    } else if (trace.type == 'end') {
         text += '<b>Nous en sommes là !</b>';
-    } else if (!position.pos.speed && !position.pos.alt && !position.pos.dist) {
-        // Auncune information, on zappe
-        return true;
-    } else if (!position.pos.dist) {
-        // On repart, sûrement après une longue pause (genre le lendemain)
-        opt = {icon: yellow};
+    } else if (trace.type == 'pause') {
         text += '<b>Et c’est reparti !</b> 🚦';
     }
 
-    journey.push(position.pos);
+    if (trace.speed) {
+        text += '<br>🚀 ' + number_format(trace.speed) + ' km/h';
+    }
+    if (trace.alt) {
+        text += '<br>⛰ ' + number_format(parseInt(trace.alt)) + ' m';
+    }
+    if (trace.dist) {
+        text += '<br>⛳ ' + number_format(trace.dist / 1000) + ' km';
+    }
+    if (trace.tdist2) {
+        text += '<br>🚩 ' + number_format(trace.tdist2 / 1000) + ' km';
+    }
+    if (trace.tdist) {
+        text += '<br>🏁 ' + number_format(trace.tdist / 1000) + ' km';
+    }
+    text += '<br><br><small>' + trace.date + '</small></p>';
 
-    if (position.pos.speed) {
-        text += '<br>🚀 ' + number_format(position.pos.speed) + ' km/h';
-    }
-    if (position.pos.alt) {
-        text += '<br>⛰ ' + number_format(parseInt(position.pos.alt)) + ' m';
-    }
-    if (position.pos.dist) {
-        previous_distance = position.pos.dist;
-        text += '<br>🚩 ' + number_format((total_distance + position.pos.dist) / 1000) + ' km';
-    } else if (!position.pos.dist || position == last) {
-        total_distance += previous_distance;
-        if (total_distance) {
-            text += '<br>🚩 ' + number_format(total_distance / 1000) + ' km';
-        }
-    }
-    text += '<br><br><small>' + position.date + '</small></p>';
-
-    let marker = L.marker(position.pos, opt).addTo(map);
+    let marker = L.marker(position, {icon: marker_color[trace.type]}).addTo(map);
     marker.bindPopup(text);
-    if (position == last) {
+    if (trace == last) {
         marker.openPopup();
     }
 });

@@ -12,3 +12,38 @@ body {
 .leaflet-routing-container {
     display: none;
 }
+
+.blink {
+    animation: blink 1s steps(1, end) infinite;
+}
+
+@keyframes blink {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.red {
+    color: #c00000;
+}
+
+.sos {
+    border: 1px solid crimson;
+    border-left-width: 10px;
+    border-right-width: 10px;
+    color: crimson;
+    text-align: center;
+    padding: 1em 0;
+    font-variant: small-caps;
+    font-size: 1.3em;
+}
+
+.sos a {
+    color: teal;
+}

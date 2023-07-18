@@ -7,7 +7,7 @@ import json
 import time
 from pathlib import Path
 
-from bottle import default_app, request, route, static_file, template
+from bottle import default_app, redirect, request, route, static_file, template
 
 __version__ = "1.1.0"
 __author__ = "Mickaël Schoentgen"
@@ -24,20 +24,110 @@ modifications, that you make.
 
 ROOT = Path(__file__).parent
 ASSETS = ROOT / "assets"
-VIEWS = ROOT / "views"
 CURRENT_TRIP = ROOT / "traces" / "2023-pyrenees"
+SOS = ROOT / "sos"
+VIEWS = ROOT / "views"
 
 
-def get_all_traces():
+def get_all_traces(folder=CURRENT_TRIP):
     """Retrieve all recorded traces."""
     traces = []
-    for file in sorted(CURRENT_TRIP.glob("*.json")):
+    for file in sorted(folder.glob("*.json")):
         data = json.loads(file.read_text())
         data["date"] = time.strftime(
             "%d/%m/%Y à %H:%M:%S", time.localtime(int(file.stem))
         )
         traces.append(data)
+    return adapt_traces(traces)
+
+
+def adapt_traces(traces):
+    """
+    Adapt traces details.
+    Traces without relevant data are ignored.
+
+    Trace data:
+        - date
+        - type: start | end | pause | in-between | sos-past | sos
+        - dist: distance since last trace
+        - tdist: total distance since the begining
+        - tdist2: total distance since the pause, or the begining if none
+        - speed
+        - alt: altitude
+        - lat: latitude
+        - lon: longitude
+    """
+    fmt_traces = []
+    total_distance = 0.0
+    total_distance_since_last_pause = 0.0
+    first, last = traces[0], traces[-1]
+
+    for trace in traces:
+        fmt_trace = {
+            "date": trace["date"],
+            "lat": trace["lat"],
+            "lon": trace["lon"],
+            "alt": trace["alt"],
+            "dist": 0.0,
+            "speed": 0.0,
+            "tdist": 0.0,
+            "tdist2": 0.0,
+            "_sos": trace.get(
+                "sos", False
+            ),  # Temporary, will be filtered in check_for_sos()
+        }
+
+        if trace == first:
+            # First trace
+            fmt_trace["type"] = "start"
+        elif trace["dist"] + trace["speed"] + trace["alt"] == 0.0:
+            # No information, lets skip it then
+            continue
+        else:
+            total_distance += trace["dist"]
+            total_distance_since_last_pause += trace["dist"]
+            fmt_trace["dist"] = trace["dist"]
+            fmt_trace["tdist"] = total_distance
+            fmt_trace["speed"] = trace["speed"]
+
+            if trace == last:
+                # Last trace
+                fmt_trace["type"] = "end"
+                fmt_trace["tdist2"] = total_distance_since_last_pause
+                total_distance_since_last_pause = 0.0
+            elif not trace["dist"]:
+                # Continuing the trip, maybe after the night, or a long pause
+                fmt_trace["type"] = "pause"
+                fmt_trace["tdist2"] = total_distance_since_last_pause
+                total_distance_since_last_pause = 0.0
+            else:
+                # Normal trace, we are moving
+                fmt_trace["type"] = "in-between"
+
+        fmt_traces.append(fmt_trace)
+
+    return check_for_sos(fmt_traces)
+
+
+def check_for_sos(traces):
+    """
+    Adapt traces for emergencies.
+
+    Trace data that may be updated:
+        - type: sos-past | sos
+    """
+    for idx in range(len(traces)):
+        if traces[idx].pop("_sos"):
+            if idx == len(traces) - 1 or traces[idx + 1]["_sos"]:
+                traces[idx]["type"] = "sos"
+            else:
+                traces[idx]["type"] = "sos-past"
     return traces
+
+
+def emergency_ongoing():
+    """Check the current emergency state."""
+    return SOS.is_file()
 
 
 @route("/assets/<file:path>", method="GET")
@@ -49,7 +139,12 @@ def asset(file):
 @route("/", method="GET")
 def home():
     """Display the home page with the map."""
-    return template("home", traces=get_all_traces(), template_lookup=[VIEWS])
+    return template(
+        "home",
+        traces=get_all_traces(),
+        emergency_ongoing=emergency_ongoing(),
+        template_lookup=[VIEWS],
+    )
 
 
 @route("/log", method="GET")
@@ -77,8 +172,26 @@ def new_trace():
         "lat": float(params.lat),
         "lon": float(params.lon),
         "speed": float(params.speed),
+        "sos": SOS.is_file(),
     }
     file.write_text(json.dumps(data))
+
+
+@route("/ok", method="GET")
+def emergency_done():
+    """Stop the SOS signal."""
+    SOS.unlink(missing_ok=True)
+    redirect("/")
+
+
+@route("/sos", method="GET")
+def emergency():
+    """Start a SOS signal."""
+    if not emergency_ongoing():
+        SOS.write_text(
+            time.strftime("%d/%m/%Y à %H:%M:%S", time.localtime(time.time()))
+        )
+    redirect("/")
 
 
 application = default_app()
