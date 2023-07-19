@@ -17,7 +17,7 @@
     <br>
     Date d’émission du signal : {{ traces[-1]["date"] }}
     <br>
-    <a href="https://www.openstreetmap.org/?mlat={{ traces[-1]["lat"] }}&mlon={{ traces[-1]["lon"] }}#map=16/{{ traces[-1]["lat"] }}/{{ traces[-1]["lon"] }}" target="_blank">Coordonnées</a> : lat/lon {{ traces[-1]["lat"] }} {{ traces[-1]["lon"] }}
+    <a href="https://www.openstreetmap.org/?mlat={{ traces[-1]["lat"] }}&mlon={{ traces[-1]["lon"] }}#map=16/{{ traces[-1]["lat"] }}/{{ traces[-1]["lon"] }}" target="_blank">Coordonnées</a> : lat/lon <a href="geo:{{ traces[-1]["lat"] }},{{ traces[-1]["lon"] }}?z=16">{{ traces[-1]["lat"] }} {{ traces[-1]["lon"] }}</a>
     %end
 </div>
 %end
