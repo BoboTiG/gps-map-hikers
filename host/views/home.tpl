@@ -39,9 +39,9 @@
     %end
     ];
 </script>
+%if traces:
 <script src="assets/js/leaflet.js"></script>
 <script src="assets/js/leaflet-routing-machine.min.js"></script>
-%if traces:
 <script src="assets/js/app.js"></script>
 %end
 </body>
