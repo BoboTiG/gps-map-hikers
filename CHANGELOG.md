@@ -3,20 +3,19 @@
 `2023-07-17`
 
 - Improve map rendering with lot of markers (closes #1).
-- Display the total distance on each marker (closes #2).
-- Capability to fire a SOS signal (closes #3).
-- Display altitude in marker's text (closes #4).
-- Can display a picture for each marker (closes #5).
+- Capability to fire/stop a SOS signal (closes #3).
+- Display more details in the marker's bubble (closes #3, closes #4).
+- Possibility to attach a picture to a marker (closes #5).
 - Display a proper message when there is no trace.
 - Improve the marker bubble design.
 - Add a nice legend.
 - Allow to zoom even more to see all details.
-- Adjust the code to fit into PythonAnywhere hosting.
 - Set a generic website title (*Trek*).
 - Use a cool font family for the website ([Victor Mono](https://rubjo.github.io/victor-mono/)).
 - Website endpoints with write access are now protected.
 - Prevent search engine crawlers to browse the website.
-- Moved the traces logic from JS to Python.
+- [dev] Moved the traces logic from JS to Python.
+- [dev] Adjust the code to fit into PythonAnywhere hosting.
 - [dev] Keep a copy of the marker icon source.
 - [dev] Introduce developement dependencies to lint, and test, the code.
 - [dev] Ignore trace details (keep only a final ZIP'ed file containing all traces).
