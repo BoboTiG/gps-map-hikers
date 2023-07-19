@@ -85,3 +85,7 @@ abbr:hover {
 .sos a {
     color: teal;
 }
+
+form {
+    margin: 1em;
+}

@@ -10,21 +10,25 @@
 
 <body>
 <form action="picture/upload", method="post" enctype="multipart/form-data">
-  <label for="trace">Choisir une trace</label>
-  <input list="traces" name="trace" autocomplete="off">
-  <datalist id="traces">
+  <label for="trace">Trace</label>
+  <select name="trace">
     %for trace in reversed(traces):
-    <option value="{{ trace["ts"] }}">{{ trace["date"] }}</option>
+    %if trace["pic"]:
+    <option value="{{ trace["ts"] }}">✧ {{ trace["date"] }}</option>
+    %else:
+    <option value="{{ trace["ts"] }}">{{ trace["date"] }} </option>
     %end
-  </datalist> 
+    %end
+  </select> 
   <br>
-  <br>
-  <label for="picture">Choisir une photo</label>
-  <input type="file" name="picture">
+  <label for="picture">Photo</label>
+  <input type="file" name="picture" />
   <br>
   <br>
   <button type="submit">Envoyer</button>
+  <p>✧ Une photo est déjà assignée à la trace et sera écrasée.</p>
 </form>
+
 </body>
 
 </html>
