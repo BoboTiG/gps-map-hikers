@@ -27,6 +27,7 @@ ASSETS = ROOT / "assets"
 CURRENT_TRIP = ROOT / "traces" / "2023-pyrenees"
 SOS = ROOT / "sos"
 VIEWS = ROOT / "views"
+UTC_2 = 3600 * 2
 
 
 def get_all_traces(folder=CURRENT_TRIP):
@@ -34,7 +35,7 @@ def get_all_traces(folder=CURRENT_TRIP):
     traces = []
     for file in sorted(folder.glob("*.json")):
         data = json.loads(file.read_text())
-        data["date"] = time.strftime("%d/%m/%Y à %H:%M:%S", time.localtime(int(file.stem)))
+        data["date"] = time.strftime("%d/%m/%Y à %H:%M:%S", time.localtime(int(file.stem) + UTC_2))
         traces.append(data)
     return adapt_traces(traces)
 
