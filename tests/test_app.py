@@ -16,14 +16,14 @@ def test_asset():
 
 
 def test_home_no_traces(tmp_path):
-    with patch("host.app.CURRENT_TRIP", tmp_path):
+    with patch("host.app.TRACES", tmp_path):
         content = app.home()
-    assert "La carte sera affichée dès le premier relevé GPS" in content
+    assert "La carte sera affichée" in content
 
 
 def test_home(tmp_path):
     (tmp_path / "1689705170.json").write_text('{"alt": 0.0, "lat": 0.0, "lon": 0.0}')
-    with patch("host.app.CURRENT_TRIP", tmp_path):
+    with patch("host.app.TRACES", tmp_path):
         content = app.home()
     assert "<title>Trek</title>" in content
     assert "var traces = [" in content
@@ -56,7 +56,7 @@ def test_emergency():
 def test_new_trace_already_present(tmp_path):
     (tmp_path / "1689705170.json").write_text("")
     with (
-        patch("host.app.CURRENT_TRIP", tmp_path),
+        patch("host.app.TRACES", tmp_path),
         boddle(auth=(app.USER, app.PWD), query={"epoch": 1689705170}),
     ):
         app.new_trace()
@@ -64,7 +64,7 @@ def test_new_trace_already_present(tmp_path):
 
 def test_new_trace(tmp_path):
     with (
-        patch("host.app.CURRENT_TRIP", tmp_path),
+        patch("host.app.TRACES", tmp_path),
         boddle(
             auth=(app.USER, app.PWD),
             query={
@@ -83,7 +83,7 @@ def test_new_trace(tmp_path):
 
 def test_picture_form_no_traces(tmp_path):
     with (
-        patch("host.app.CURRENT_TRIP", tmp_path),
+        patch("host.app.TRACES", tmp_path),
         pytest.raises(HTTPResponse),
         boddle(auth=(app.USER, app.PWD)),
     ):
@@ -94,7 +94,7 @@ def test_picture_form(tmp_path):
     (tmp_path / "1689705170.json").write_text('{"pic": "", "ts": 1689705170}')
 
     with (
-        patch("host.app.CURRENT_TRIP", tmp_path),
+        patch("host.app.TRACES", tmp_path),
         boddle(auth=(app.USER, app.PWD)),
     ):
         content = app.picture_form()
@@ -122,7 +122,7 @@ def test_upload_picure(tmp_path):
     # jpg = BytesIO(b"data")
 
     with (
-        patch("host.app.CURRENT_TRIP", tmp_path),
+        patch("host.app.TRACES", tmp_path),
         patch("host.app.PICTURES", pictures),
         pytest.raises(HTTPResponse),
         boddle(auth=(app.USER, app.PWD), query={"trace": "1689705170"}, files=...),

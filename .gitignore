@@ -3,8 +3,6 @@
 __pycache__/
 host/basic_auth.txt
 host/sos
-host/traces/*/*.json
-host/traces/*/*.log
-host/traces/*/pictures/
+host/traces/
 .vscode/
 venv/

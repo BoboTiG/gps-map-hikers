@@ -25,13 +25,15 @@ modifications, that you make.
 
 ROOT = Path(__file__).parent
 ASSETS = ROOT / "assets"
-CURRENT_TRIP = ROOT / "traces" / "2023-pyrenees"
-PICTURES = CURRENT_TRIP / "pictures"
+TRACES = ROOT / "traces"
+PICTURES = TRACES / "pictures"
 SOS = ROOT / "sos"
 VIEWS = ROOT / "views"
 UTC_2 = 3600 * 2
 USER, PWD = (ROOT / "basic_auth.txt").read_text().strip().split(":", 1)
 SLEEP_SEC = 2
+
+PICTURES.mkdir(exist_ok=True, parents=True)
 
 
 def is_authenticated_user(user, password):
@@ -41,7 +43,7 @@ def is_authenticated_user(user, password):
 
 def get_all_traces(folder=None):
     """Retrieve all recorded traces."""
-    folder = folder or CURRENT_TRIP
+    folder = folder or TRACES
     pictures = sorted((folder / "pictures").glob("*.*"))
     folder_prefix = str(folder)
 
@@ -234,7 +236,7 @@ def picture_form():
 def picture_upload():
     """Upload a picture."""
     trace = request.forms["trace"]
-    if not (CURRENT_TRIP / f"{trace}.json").is_file():
+    if not (TRACES / f"{trace}.json").is_file():
         redirect("/picture")
 
     PICTURES.mkdir(exist_ok=True, parents=True)
@@ -270,7 +272,7 @@ def new_trace():
     """
     params = request.query
 
-    file = CURRENT_TRIP / f"{params.epoch}.json"
+    file = TRACES / f"{params.epoch}.json"
     if file.is_file():
         # The app may send the same trace several times
         return
