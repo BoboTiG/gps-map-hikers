@@ -5,6 +5,8 @@ from boddle import boddle
 from bottle import HTTPResponse
 
 from host.app import (
+    PWD,
+    USER,
     asset,
     emergency,
     emergency_done,
@@ -59,7 +61,7 @@ def test_new_trace_already_present(tmp_path):
     (tmp_path / "1689705170.json").write_text("")
     with (
         patch("host.app.CURRENT_TRIP", tmp_path),
-        boddle(query={"epoch": 1689705170}),
+        boddle(auth=(USER, PWD), query={"epoch": 1689705170}),
     ):
         new_trace()
 
@@ -68,6 +70,7 @@ def test_new_trace(tmp_path):
     with (
         patch("host.app.CURRENT_TRIP", tmp_path),
         boddle(
+            auth=(USER, PWD),
             query={
                 "epoch": 1689705170,
                 "alt": 68.4,
@@ -75,7 +78,7 @@ def test_new_trace(tmp_path):
                 "lat": 44.77042298298329,
                 "lon": 0.7979252468794584,
                 "speed": 0.0,
-            }
+            },
         ),
     ):
         new_trace()
@@ -83,13 +86,17 @@ def test_new_trace(tmp_path):
 
 
 def test_picture_form():
-    content = picture_form()
-    assert "<title>Trek | Photo</title>" in content
-    assert '<input list="traces"' in content
+    with boddle(auth=(USER, PWD)):
+        content = picture_form()
+        assert "<title>Trek | Photo</title>" in content
+        assert '<form action="picture/upload"' in content
 
 
 def test_upload_picure_no_trace():
-    with pytest.raises(HTTPResponse), boddle(params={"trace": "123"}):
+    with (
+        pytest.raises(HTTPResponse),
+        boddle(auth=(USER, PWD), params={"trace": "123"}),
+    ):
         picture_upload()
 
 
@@ -108,7 +115,7 @@ def test_upload_picure(tmp_path):
         patch("host.app.CURRENT_TRIP", tmp_path),
         patch("host.app.PICTURES", pictures),
         pytest.raises(HTTPResponse),
-        boddle(query={"trace": "1689705170"}, files=...),
+        boddle(auth=(USER, PWD), query={"trace": "1689705170"}, files=...),
     ):
         picture_upload()
 

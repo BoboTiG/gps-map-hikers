@@ -9,7 +9,7 @@
 </head>
 
 <body>
-<form action="picture/upload", method="post" enctype="multipart/form-data">
+<form action="picture/upload" method="post" enctype="multipart/form-data">
   <label for="trace">Trace</label>
   <select name="trace">
     %for trace in reversed(traces):

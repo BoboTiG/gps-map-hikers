@@ -6,8 +6,9 @@ Script maintained by Mickaël Schoentgen <contact@tiger-222.fr>.
 import json
 import time
 from pathlib import Path
+from time import sleep
 
-from bottle import default_app, redirect, request, route, static_file, template
+from bottle import auth_basic, default_app, redirect, request, route, static_file, template
 
 __version__ = "1.1.0"
 __author__ = "Mickaël Schoentgen"
@@ -29,6 +30,12 @@ PICTURES = CURRENT_TRIP / "pictures"
 SOS = ROOT / "sos"
 VIEWS = ROOT / "views"
 UTC_2 = 3600 * 2
+USER, PWD = (ROOT / "basic_auth.txt").read_text().strip().split(":", 1)
+
+
+def is_authenticated_user(user, password):
+    sleep(2)
+    return (user == USER and password == PWD) or (password == PWD and user == USER)
 
 
 def get_all_traces(folder=CURRENT_TRIP):
@@ -212,12 +219,14 @@ def home():
 
 
 @route("/picture", method="GET")
+@auth_basic(is_authenticated_user)
 def picture_form():
     """Upload picture form."""
     return template("picture", traces=get_all_traces(), template_lookup=[VIEWS])
 
 
 @route("/picture/upload", method="POST")
+@auth_basic(is_authenticated_user)
 def picture_upload():
     """Upload a picture."""
     trace = request.forms["trace"]
@@ -243,6 +252,7 @@ def picture_get(picture):
 
 
 @route("/log", method="GET")
+@auth_basic(is_authenticated_user)
 def new_trace():
     """
     A new trace is sent for recording.
