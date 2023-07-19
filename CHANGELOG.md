@@ -30,4 +30,30 @@
 
 `2021-03-13`
 
+- Full rewrite.
+
+## 0.2.2
+
+`2016-10-24`
+
+- [dev] Automatic deployment.
+
+## 0.2.1
+
+`2016-10-23`
+
+- [dev] Do not use a cache for `data.js`.
+
+## 0.2.0
+
+`2016-10-22`
+
+- [WIP] Introduce routing.
+- [dev] Rework the source code tree.
+
+## 0.1.0
+
+`2016-10-21`
+
 - Initial version.
+
