@@ -95,6 +95,9 @@ traces.forEach(function(trace) {
     if (trace.tdist) {
         text += '<br>🏁 ' + number_format(trace.tdist / 1000) + ' km';
     }
+    if (trace.pic) {
+        text += '<br><br>📷 <a href="' + trace.pic + '" target="_blank">Photo</a>';
+    }
     text += '<br><br><small>' + trace.date + '</small></p>';
 
     let marker = L.marker(position, {icon: marker_color[trace.type]}).addTo(map);

@@ -25,6 +25,7 @@ modifications, that you make.
 ROOT = Path(__file__).parent
 ASSETS = ROOT / "assets"
 CURRENT_TRIP = ROOT / "traces" / "2023-pyrenees"
+PICTURES = CURRENT_TRIP / "pictures"
 SOS = ROOT / "sos"
 VIEWS = ROOT / "views"
 UTC_2 = 3600 * 2
@@ -32,11 +33,14 @@ UTC_2 = 3600 * 2
 
 def get_all_traces(folder=CURRENT_TRIP):
     """Retrieve all recorded traces."""
+    pictures = sorted((folder / "pictures").glob("*.*"))
+
     traces = []
     for file in sorted(folder.glob("*.json")):
         data = json.loads(file.read_text())
         data["ts"] = int(file.stem)
         data["date"] = time.strftime("%d/%m/%Y à %H:%M:%S", time.localtime(int(file.stem) + UTC_2))
+        data["pic"] = str(next((p for p in pictures if p.stem == file.stem), "")).removeprefix(str(folder))
         traces.append(data)
     return traces
 
@@ -52,6 +56,7 @@ def adapt_traces(traces):
         - dist: distance since last trace
         - lat: latitude
         - lon: longitude
+        - pic: optional picture
         - speed
         - tdist: total distance since the begining
         - tdist2: total distance since the pause, or the begining if none
@@ -74,6 +79,7 @@ def adapt_traces(traces):
             "date": trace["date"],
             "lat": trace["lat"],
             "lon": trace["lon"],
+            "pic": trace["pic"],
             "ts": trace["ts"],
             "dist": 0.0,
             "speed": 0.0,
@@ -202,6 +208,37 @@ def home():
         emergency_ongoing=emergency_ongoing(),
         template_lookup=[VIEWS],
     )
+
+
+@route("/picture", method="GET")
+def picture_form():
+    """Upload picture form."""
+    return template("picture", traces=get_all_traces(), template_lookup=[VIEWS])
+
+
+@route("/picture/upload", method="POST")
+def picture_upload():
+    """Upload a picture."""
+    trace = request.forms["trace"]
+    if not (CURRENT_TRIP / f"{trace}.json").is_file():
+        redirect("/picture")
+
+    PICTURES.mkdir(exist_ok=True, parents=True)
+
+    upload = request.files["picture"]
+    picture = Path(upload.filename)
+    ext = picture.suffix.lower().replace("jpeg", "jpg")
+    file = PICTURES / f"{trace}{ext}"
+    with file.open(mode="wb") as fh:
+        upload.save(fh)
+
+    redirect("/")
+
+
+@route("/pictures/<picture:path>", method="GET")
+def picture_get(picture):
+    """Get a picture file."""
+    return static_file(picture, root=PICTURES)
 
 
 @route("/log", method="GET")

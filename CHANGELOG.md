@@ -6,6 +6,7 @@
 - Display the total distance on each marker (closes #2).
 - Capability to fire a SOS signal (closes #3).
 - Display altitude in marker's text (closes #4).
+- Can display a picture for each marker (closes #5).
 - Improve the marker bubble design.
 - Add a nice legend.
 - Allow to zoom even more to see all details.

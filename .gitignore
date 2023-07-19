@@ -4,5 +4,6 @@ __pycache__/
 host/sos
 host/traces/*/*.json
 host/traces/*/*.log
+host/traces/*/pictures/
 .vscode/
 venv/
