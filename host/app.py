@@ -34,13 +34,14 @@ UTC_2 = 3600 * 2
 def get_all_traces(folder=CURRENT_TRIP):
     """Retrieve all recorded traces."""
     pictures = sorted((folder / "pictures").glob("*.*"))
+    folder_prefix = str(folder)
 
     traces = []
     for file in sorted(folder.glob("*.json")):
         data = json.loads(file.read_text())
         data["ts"] = int(file.stem)
         data["date"] = time.strftime("%d/%m/%Y à %H:%M:%S", time.localtime(int(file.stem) + UTC_2))
-        data["pic"] = str(next((p for p in pictures if p.stem == file.stem), "")).removeprefix(str(folder))
+        data["pic"] = str(next((p for p in pictures if p.stem == file.stem), "")).removeprefix(folder_prefix)
         traces.append(data)
     return traces
 
