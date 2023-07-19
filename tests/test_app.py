@@ -4,73 +4,61 @@ import pytest
 from boddle import boddle
 from bottle import HTTPResponse
 
-from host.app import (
-    PWD,
-    USER,
-    asset,
-    emergency,
-    emergency_done,
-    emergency_ongoing,
-    favicon,
-    home,
-    new_trace,
-    picture_form,
-    picture_get,
-    picture_upload,
-    robots,
-)
+from host import app
+
+app.SLEEP_SEC = 0
 
 
 def test_asset():
-    response = asset("css/images/layers.png")
+    response = app.asset("css/images/layers.png")
     assert response.status_code == 200
     assert response.content_type == "image/png"
 
 
 def test_home():
-    content = home()
+    content = app.home()
     assert "<title>Trek</title>" in content
     assert "var traces = [" in content
 
 
 def test_robots():
-    response = robots()
+    response = app.robots()
     assert response.status_code == 200
     assert response.content_type == "text/plain; charset=UTF-8"
 
 
 def test_favicon():
-    response = favicon()
+    response = app.favicon()
     assert response.status_code == 200
     assert response.content_type == "image/png"
 
 
 def test_emergency():
-    assert not emergency_ongoing()
+    assert not app.emergency_ongoing()
 
-    with boddle(auth=(USER, PWD)), pytest.raises(HTTPResponse):
-        emergency()
-    assert emergency_ongoing()
+    with boddle(auth=(app.USER, app.PWD)), pytest.raises(HTTPResponse):
+        app.emergency()
+    assert app.emergency_ongoing()
 
-    with boddle(auth=(USER, PWD)), pytest.raises(HTTPResponse):
-        emergency_done()
-    assert not emergency_ongoing()
+    with boddle(auth=(app.USER, app.PWD)), pytest.raises(HTTPResponse):
+        app.emergency_done()
+    assert not app.emergency_ongoing()
 
 
 def test_new_trace_already_present(tmp_path):
     (tmp_path / "1689705170.json").write_text("")
     with (
         patch("host.app.CURRENT_TRIP", tmp_path),
-        boddle(auth=(USER, PWD), query={"epoch": 1689705170}),
+        boddle(auth=(app.USER, app.PWD), query={"epoch": 1689705170}),
     ):
-        new_trace()
+        app.new_trace()
 
 
 def test_new_trace(tmp_path):
     with (
         patch("host.app.CURRENT_TRIP", tmp_path),
         boddle(
-            auth=(USER, PWD),
+            auth=(app.USER, app.PWD),
             query={
                 "epoch": 1689705170,
                 "alt": 68.4,
@@ -81,13 +69,27 @@ def test_new_trace(tmp_path):
             },
         ),
     ):
-        new_trace()
+        app.new_trace()
     assert (tmp_path / "1689705170.json").is_file()
 
 
-def test_picture_form():
-    with boddle(auth=(USER, PWD)):
-        content = picture_form()
+def test_picture_form_no_traces(tmp_path):
+    with (
+        patch("host.app.CURRENT_TRIP", tmp_path),
+        pytest.raises(HTTPResponse),
+        boddle(auth=(app.USER, app.PWD)),
+    ):
+        app.picture_form()
+
+
+def test_picture_form(tmp_path):
+    (tmp_path / "1689705170.json").write_text('{"pic": "", "ts": 1689705170}')
+
+    with (
+        patch("host.app.CURRENT_TRIP", tmp_path),
+        boddle(auth=(app.USER, app.PWD)),
+    ):
+        content = app.picture_form()
         assert "<title>Trek | Photo</title>" in content
         assert '<form action="picture/upload"' in content
 
@@ -95,9 +97,9 @@ def test_picture_form():
 def test_upload_picure_no_trace():
     with (
         pytest.raises(HTTPResponse),
-        boddle(auth=(USER, PWD), params={"trace": "123"}),
+        boddle(auth=(app.USER, app.PWD), params={"trace": "123"}),
     ):
-        picture_upload()
+        app.picture_upload()
 
 
 def test_upload_picure(tmp_path):
@@ -115,9 +117,9 @@ def test_upload_picure(tmp_path):
         patch("host.app.CURRENT_TRIP", tmp_path),
         patch("host.app.PICTURES", pictures),
         pytest.raises(HTTPResponse),
-        boddle(auth=(USER, PWD), query={"trace": "1689705170"}, files=...),
+        boddle(auth=(app.USER, app.PWD), query={"trace": "1689705170"}, files=...),
     ):
-        picture_upload()
+        app.picture_upload()
 
     assert (pictures / "1689705170.jpg").is_file()
 
@@ -128,6 +130,6 @@ def test_picture_get(tmp_path):
     (pictures / "1689705170.jpg").write_bytes(b"data")
 
     with patch("host.app.PICTURES", pictures):
-        response = picture_get("1689705170.jpg")
+        response = app.picture_get("1689705170.jpg")
         assert response.status_code == 200
         assert response.content_type == "image/jpeg"

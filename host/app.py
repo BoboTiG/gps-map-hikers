@@ -31,15 +31,17 @@ SOS = ROOT / "sos"
 VIEWS = ROOT / "views"
 UTC_2 = 3600 * 2
 USER, PWD = (ROOT / "basic_auth.txt").read_text().strip().split(":", 1)
+SLEEP_SEC = 2
 
 
 def is_authenticated_user(user, password):
-    sleep(2)
+    sleep(SLEEP_SEC)
     return (user == USER and password == PWD) or (password == PWD and user == USER)
 
 
-def get_all_traces(folder=CURRENT_TRIP):
+def get_all_traces(folder=None):
     """Retrieve all recorded traces."""
+    folder = folder or CURRENT_TRIP
     pictures = sorted((folder / "pictures").glob("*.*"))
     folder_prefix = str(folder)
 
@@ -222,7 +224,9 @@ def home():
 @auth_basic(is_authenticated_user)
 def picture_form():
     """Upload picture form."""
-    return template("picture", traces=get_all_traces(), template_lookup=[VIEWS])
+    if not (traces := get_all_traces()):
+        redirect("/")
+    return template("picture", traces=traces, template_lookup=[VIEWS])
 
 
 @route("/picture/upload", method="POST")
