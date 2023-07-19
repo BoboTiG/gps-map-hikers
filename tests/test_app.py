@@ -15,8 +15,16 @@ def test_asset():
     assert response.content_type == "image/png"
 
 
-def test_home():
-    content = app.home()
+def test_home_no_traces(tmp_path):
+    with patch("host.app.CURRENT_TRIP", tmp_path):
+        content = app.home()
+    assert "La carte sera affichée dès le premier relevé GPS" in content
+
+
+def test_home(tmp_path):
+    (tmp_path / "1689705170.json").write_text('{"alt": 0.0, "lat": 0.0, "lon": 0.0}')
+    with patch("host.app.CURRENT_TRIP", tmp_path):
+        content = app.home()
     assert "<title>Trek</title>" in content
     assert "var traces = [" in content
 

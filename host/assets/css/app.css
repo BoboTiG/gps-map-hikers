@@ -67,10 +67,6 @@ abbr:hover {
     filter: drop-shadow(1px 1px 1px #999);
 }
 
-.red {
-    color: #c00000;
-}
-
 .sos {
     border: 1px solid crimson;
     border-left-width: 10px;
@@ -88,4 +84,20 @@ abbr:hover {
 
 form {
     margin: 1em;
+}
+
+.no-traces {
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+
+@media (max-width: 700px) {
+    .no-traces {
+        left: 0;
+        transform: translate(0, 0);
+        margin: 0.5em;
+    }
 }

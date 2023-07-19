@@ -13,12 +13,16 @@
 %if emergency_ongoing:
 <div class="sos">
     <b class="blink">🆘</b> Entrez en contact avec nous au plus vite&nbsp;!
+    %if traces:
     <br>
     Date d’émission du signal : {{ traces[-1]["date"] }}
     <br>
-     <a href="https://www.openstreetmap.org/?mlat={{ traces[-1]["lat"] }}&mlon={{ traces[-1]["lon"] }}#map=16/{{ traces[-1]["lat"] }}/{{ traces[-1]["lon"] }}" target="_blank">Coordonnées</a> : lat/lon {{ traces[-1]["lat"] }} {{ traces[-1]["lon"] }}
+    <a href="https://www.openstreetmap.org/?mlat={{ traces[-1]["lat"] }}&mlon={{ traces[-1]["lon"] }}#map=16/{{ traces[-1]["lat"] }}/{{ traces[-1]["lon"] }}" target="_blank">Coordonnées</a> : lat/lon {{ traces[-1]["lat"] }} {{ traces[-1]["lon"] }}
+    %end
 </div>
 %end
+
+%if traces:
 <div id="legend">
     🚀 Vitesse de marche
     <br>
@@ -39,10 +43,11 @@
     %end
     ];
 </script>
-%if traces:
 <script src="assets/js/leaflet.js"></script>
 <script src="assets/js/leaflet-routing-machine.min.js"></script>
 <script src="assets/js/app.js"></script>
+%else:
+<p class="no-traces">⌚ La carte sera affichée dès le <mark>premier relevé GPS</mark>.</p>
 %end
 </body>
 
