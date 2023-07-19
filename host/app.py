@@ -38,7 +38,7 @@ def get_all_traces(folder=CURRENT_TRIP):
         data["ts"] = int(file.stem)
         data["date"] = time.strftime("%d/%m/%Y à %H:%M:%S", time.localtime(int(file.stem) + UTC_2))
         traces.append(data)
-    return adapt_traces(traces)
+    return traces
 
 
 def adapt_traces(traces):
@@ -198,7 +198,7 @@ def home():
     """Display the home page with the map."""
     return template(
         "home",
-        traces=get_all_traces(),
+        traces=adapt_traces(get_all_traces()),
         emergency_ongoing=emergency_ongoing(),
         template_lookup=[VIEWS],
     )

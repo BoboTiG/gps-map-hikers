@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from host.app import check_for_sos, get_all_traces
+from host.app import adapt_traces, check_for_sos, get_all_traces
 
 TRACES = Path(__file__).parent / "data"
 EXPECTED_TRACES = [
@@ -446,11 +446,19 @@ def test_get_all_traces_no_traces(tmp_path):
 
 
 def test_get_all_traces():
-    for trace in get_all_traces(TRACES):
+    assert len(get_all_traces(TRACES)) == 37
+
+
+def test_adapt_traces_no_traces():
+    assert adapt_traces([]) == []
+
+
+def test_adapt_traces():
+    for trace in adapt_traces(get_all_traces(TRACES)):
         print(f"{trace},")
 
     total_distance = 0.0
-    for idx, trace in enumerate(get_all_traces(TRACES)):
+    for idx, trace in enumerate(adapt_traces(get_all_traces(TRACES))):
         assert trace == EXPECTED_TRACES[idx]
 
         # Check the total distance always goes up
