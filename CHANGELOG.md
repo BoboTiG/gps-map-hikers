@@ -4,7 +4,7 @@
 
 - Improve map rendering with lot of markers (closes #1).
 - Capability to fire/stop a SOS signal (closes #3).
-- Display more details in the marker's bubble (closes #3 & closes #4).
+- Display more details in the marker's bubble (closes #2) (closes #4).
 - Possibility to attach a picture to a marker (closes #5).
 - Display a proper message when there is no trace.
 - Improve the marker bubble design.
