@@ -50,13 +50,13 @@ abbr:hover {
 }
 
 #legend {
-    border-top: 1px inset goldenrod;
-    border-right: 1px inset goldenrod;
+    border-top: 1px outset rgba(0, 0, 0, 0.8);
+    border-right: 1px outset rgba(0, 0, 0, 0.8);
     position: absolute;
     bottom: 0;
     z-index: 10000;
     padding: 0.5em;
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(255, 255, 255, 0.8);
     font-size: 0.8em;
     border-top-right-radius: 0.5em;
 }
@@ -64,7 +64,7 @@ abbr:hover {
 #legend img {
     height: 16px;
     vertical-align: middle;
-    filter: drop-shadow(1px -1px 1px #999);
+    filter: drop-shadow(1px 1px 1px #999);
 }
 
 .red {

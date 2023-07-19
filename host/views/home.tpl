@@ -22,7 +22,7 @@
 <div id="legend">
     🚀 Vitesse de marche
     <br>
-    ⛰ Altitude (à peu près)
+    ⛰ Altitude
     <br>
     ⛳ Distance parcourue depuis le <abbr title="Un marqueur bleu représente un relevé GPS.">dernier <img src="assets/css/images/marker-blue.png"></abbr>
     <br>
