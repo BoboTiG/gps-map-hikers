@@ -48,11 +48,11 @@ def test_favicon():
 def test_emergency():
     assert not emergency_ongoing()
 
-    with pytest.raises(HTTPResponse):
+    with boddle(auth=(USER, PWD)), pytest.raises(HTTPResponse):
         emergency()
     assert emergency_ongoing()
 
-    with pytest.raises(HTTPResponse):
+    with boddle(auth=(USER, PWD)), pytest.raises(HTTPResponse):
         emergency_done()
     assert not emergency_ongoing()
 

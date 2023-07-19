@@ -283,6 +283,7 @@ def new_trace():
 
 
 @route("/ok", method="GET")
+@auth_basic(is_authenticated_user)
 def emergency_done():
     """Stop the SOS signal."""
     SOS.unlink(missing_ok=True)
@@ -290,6 +291,7 @@ def emergency_done():
 
 
 @route("/sos", method="GET")
+@auth_basic(is_authenticated_user)
 def emergency():
     """Start a SOS signal."""
     if not emergency_ongoing():
