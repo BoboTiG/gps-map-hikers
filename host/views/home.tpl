@@ -45,6 +45,7 @@
 </script>
 <script src="assets/js/leaflet.js"></script>
 <script src="assets/js/leaflet-routing-machine.min.js"></script>
+<script src="assets/js/leaflet-terminator.js"></script>
 <script src="assets/js/app.js"></script>
 %else:
 <p class="no-traces">⌚ La carte sera affichée dès le <mark>premier relevé GPS</mark>.</p>

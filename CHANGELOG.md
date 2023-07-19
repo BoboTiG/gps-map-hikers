@@ -10,6 +10,7 @@
 - Improve the marker bubble design.
 - Add a nice legend.
 - Allow to zoom even more to see all details.
+- The map will show different colors depending on the day/night (an old idea from the kewy-trip in 2016!)
 - Set a generic website title (*Trek*).
 - Use a cool font family for the website ([Victor Mono](https://rubjo.github.io/victor-mono/)).
 - Website endpoints with write access are now protected.
@@ -19,6 +20,7 @@
 - [dev] Keep a copy of the marker icon source.
 - [dev] Introduce developement dependencies to lint, and test, the code.
 - [dev] Ignore trace details (keep only a final ZIP'ed file containing all traces).
+- [dev] Add JS dependency `leaflet-terminator` `1.1.0` to display differents colors given the current hour.
 - [dev] Upgrade JS dependency `leaflet` from `1.7.1` to `1.9.4`.
 - [dev] Upgrade JS dependency `leaflet-routing-machine` from `3.2.0` to `3.2.12`.
 - [dev] Upgrade Python dependency `bottle` from `0.12.19` to `0.12.25`.

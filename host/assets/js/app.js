@@ -117,3 +117,10 @@ L.Routing.control({
                  {color: 'blue', opacity: 0.4, weight: 3}]
     },
 }).addTo(map);
+
+// Affichage jour/nuit suivant l'heure courante
+terminator = L.terminator().addTo(map);
+map.addEventListener('zoomstart movestart popupopen', function(e) {
+    terminator.setTime();
+});
+
