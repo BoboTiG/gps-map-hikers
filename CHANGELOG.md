@@ -1,6 +1,6 @@
 ## 1.1.0
 
-`2023-07-17`
+`2023-07-20`
 
 - Improve map rendering with lot of markers (closes #1).
 - Capability to fire/stop a SOS signal (closes #3).
