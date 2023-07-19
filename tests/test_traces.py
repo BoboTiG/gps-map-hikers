@@ -414,3 +414,96 @@ def test_get_all_traces():
         print(f"{t},")
     for idx, trace in enumerate(get_all_traces(TRACES)):
         assert trace == EXPECTED_TRACES[idx]
+
+
+@pytest.mark.parametrize(
+    "traces, expected",
+    [
+        (
+            [
+                {"type": "start"},
+            ],
+            [
+                {"type": "start"},
+            ],
+        ),
+        (
+            [
+                {"type": "sos"},
+            ],
+            [
+                {"type": "sos"},
+            ],
+        ),
+        (
+            [
+                {"type": "start"},
+                {"type": "sos"},
+                {"type": "sos"},
+            ],
+            [
+                {"type": "start"},
+                {"type": "sos"},
+                {"type": "sos"},
+            ],
+        ),
+        (
+            [
+                {"type": "start"},
+                {"type": "sos"},
+                {"type": "sos"},
+                {"type": "end"},
+            ],
+            [
+                {"type": "start"},
+                {"type": "sos-past"},
+                {"type": "sos-past"},
+                {"type": "end"},
+            ],
+        ),
+        (
+            [
+                {"type": "start"},
+                {"type": "in-between"},
+                {"type": "sos"},
+                {"type": "sos"},
+                {"type": "in-between"},
+                {"type": "sos"},
+                {"type": "sos"},
+            ],
+            [
+                {"type": "start"},
+                {"type": "in-between"},
+                {"type": "sos-past"},
+                {"type": "sos-past"},
+                {"type": "in-between"},
+                {"type": "sos"},
+                {"type": "sos"},
+            ],
+        ),
+        (
+            [
+                {"type": "start"},
+                {"type": "in-between"},
+                {"type": "sos"},
+                {"type": "sos"},
+                {"type": "in-between"},
+                {"type": "sos"},
+                {"type": "sos"},
+                {"type": "end"},
+            ],
+            [
+                {"type": "start"},
+                {"type": "in-between"},
+                {"type": "sos-past"},
+                {"type": "sos-past"},
+                {"type": "in-between"},
+                {"type": "sos-past"},
+                {"type": "sos-past"},
+                {"type": "end"},
+            ],
+        ),
+    ],
+)
+def test_check_for_sos(traces, expected):
+    assert check_for_sos(traces) == expected
