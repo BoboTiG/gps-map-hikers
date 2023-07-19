@@ -141,10 +141,16 @@ def asset(file):
     return static_file(file, root=ASSETS)
 
 
+@route("/favicon.png", method="GET")
+def favicon():
+    """Get the favicon file."""
+    return static_file("favicon.png", root=ASSETS)
+
+
 @route("/robots.txt", method="GET")
 def robots():
     """Get the robots.txt file (for search engine crawlers)."""
-    return static_file("robots.txt", root=ROOT)
+    return static_file("robots.txt", root=ASSETS)
 
 
 @route("/", method="GET")

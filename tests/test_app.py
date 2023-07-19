@@ -4,7 +4,7 @@ import pytest
 from boddle import boddle
 from bottle import HTTPResponse
 
-from host.app import asset, emergency, emergency_done, emergency_ongoing, home, new_trace, robots
+from host.app import asset, emergency, emergency_done, emergency_ongoing, favicon, home, new_trace, robots
 
 
 def test_asset():
@@ -23,6 +23,12 @@ def test_robots():
     response = robots()
     assert response.status_code == 200
     assert response.content_type == "text/plain; charset=UTF-8"
+
+
+def test_favicon():
+    response = favicon()
+    assert response.status_code == 200
+    assert response.content_type == "image/png"
 
 
 def test_emergency():
