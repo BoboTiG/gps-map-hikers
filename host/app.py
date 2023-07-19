@@ -35,6 +35,7 @@ def get_all_traces(folder=CURRENT_TRIP):
     traces = []
     for file in sorted(folder.glob("*.json")):
         data = json.loads(file.read_text())
+        data["ts"] = int(file.stem)
         data["date"] = time.strftime("%d/%m/%Y à %H:%M:%S", time.localtime(int(file.stem) + UTC_2))
         traces.append(data)
     return adapt_traces(traces)
@@ -47,17 +48,20 @@ def adapt_traces(traces):
 
     Trace data:
         - alt: altitude
-        - date
+        - date: converted to a string at UTC+2
         - dist: distance since last trace
         - lat: latitude
         - lon: longitude
         - speed
         - tdist: total distance since the begining
         - tdist2: total distance since the pause, or the begining if none
+        - ts: timestamp of the raw date
         - type: start | end | pause | in-between | sos-past | sos
     """
     if not traces:
         return traces
+
+    traces = fix_distance(traces)
 
     fmt_traces = []
     total_distance = 0.0
@@ -70,6 +74,7 @@ def adapt_traces(traces):
             "date": trace["date"],
             "lat": trace["lat"],
             "lon": trace["lon"],
+            "ts": trace["ts"],
             "dist": 0.0,
             "speed": 0.0,
             "tdist": 0.0,
@@ -96,7 +101,6 @@ def adapt_traces(traces):
             elif trace == last:
                 # Last trace
                 fmt_trace["type"] = "end"
-                total_distance_since_last_pause = 0.0
             elif not trace["dist"]:
                 # Continuing the trip, maybe after the night, or a long pause
                 fmt_trace["type"] = "pause"
@@ -107,7 +111,10 @@ def adapt_traces(traces):
 
         fmt_traces.append(fmt_trace)
 
-    return check_for_sos(fmt_traces)
+    fmt_traces = check_for_sos(fmt_traces)
+    fmt_traces = fix_speed(fmt_traces)
+
+    return fmt_traces
 
 
 def check_for_sos(traces):
@@ -127,6 +134,38 @@ def check_for_sos(traces):
             for i in range(start, idx):
                 traces[i]["type"] = "sos-past"
             start = -1
+
+    return traces
+
+
+def fix_distance(traces):
+    """
+    Adapt traces distance.
+
+    Trace data that may be updated:
+        - type: dist
+    """
+    for idx in range(len(traces) - 1, 1, -1):
+        if not traces[idx]["dist"]:
+            continue
+        diff = traces[idx]["dist"] - traces[idx - 1]["dist"]
+        traces[idx]["dist"] = diff
+    return traces
+
+
+def fix_speed(traces):
+    """
+    Adapt traces speed.
+
+    Trace data that may be updated:
+        - type: speed
+    """
+    for previous, current in zip(traces, traces[1:]):
+        if not current["dist"]:
+            continue
+        elapsed = current["ts"] - previous["ts"]
+        meters_per_sec = current["dist"] / elapsed
+        current["speed"] = meters_per_sec * 3.6
 
     return traces
 

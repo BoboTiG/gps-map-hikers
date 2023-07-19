@@ -35,7 +35,7 @@
 <script>
     var traces = [
     %for trace in traces:
-        { date: "{{ trace["date"] }}", type: "{{ trace["type"] }}", lat: {{ trace["lat"] }}, lon: {{ trace["lon"] }}, alt: {{ trace["alt"] }}, speed: {{ trace["speed"] }}, dist: {{ trace["dist"] }}, tdist: {{ trace["tdist"] }}, tdist2: {{ trace["tdist2"] }} },
+        { date: "{{ trace["date"] }}", dist: {{ trace["dist"] }}, lat: {{ trace["lat"] }}, lon: {{ trace["lon"] }}, alt: {{ trace["alt"] }}, speed: {{ trace["speed"] }}, tdist: {{ trace["tdist"] }}, tdist2: {{ trace["tdist2"] }}, type: "{{ trace["type"] }}" },
     %end
     ];
 </script>
