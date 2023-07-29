@@ -30,7 +30,7 @@ EXPECTED_TRACES = [
         "speed": 0.7297297297297298,
         "tdist": 15.0,
         "tdist2": 15.0,
-        "type": "in-between",
+        "type": "step",
     },
     {
         "alt": 95.4,
@@ -43,7 +43,7 @@ EXPECTED_TRACES = [
         "speed": 0.5714285714285714,
         "tdist": 25.0,
         "tdist2": 25.0,
-        "type": "in-between",
+        "type": "step",
     },
     {
         "alt": 59.4,
@@ -56,7 +56,7 @@ EXPECTED_TRACES = [
         "speed": 1.885714285714286,
         "tdist": 58.0,
         "tdist2": 58.0,
-        "type": "in-between",
+        "type": "step",
     },
     {
         "alt": 72.4,
@@ -69,7 +69,7 @@ EXPECTED_TRACES = [
         "speed": 0.45714285714285713,
         "tdist": 154.0,
         "tdist2": 154.0,
-        "type": "in-between",
+        "type": "step",
     },
     {
         "alt": 62.4,
@@ -82,7 +82,7 @@ EXPECTED_TRACES = [
         "speed": 0.4721311475409836,
         "tdist": 162.0,
         "tdist2": 162.0,
-        "type": "in-between",
+        "type": "step",
     },
     {
         "alt": 66.4,
@@ -121,7 +121,7 @@ EXPECTED_TRACES = [
         "speed": 9.635294117647058,
         "tdist": 356.0,
         "tdist2": 356.0,
-        "type": "in-between",
+        "type": "step",
     },
     {
         "alt": 76.4,
@@ -134,7 +134,7 @@ EXPECTED_TRACES = [
         "speed": 0.0331578947368421,
         "tdist": 363.0,
         "tdist2": 363.0,
-        "type": "in-between",
+        "type": "step",
     },
     {
         "alt": 67.4,
@@ -147,7 +147,7 @@ EXPECTED_TRACES = [
         "speed": 0.9173076923076923,
         "tdist": 416.0,
         "tdist2": 416.0,
-        "type": "in-between",
+        "type": "step",
     },
     {
         "alt": 64.4,
@@ -160,7 +160,7 @@ EXPECTED_TRACES = [
         "speed": 0.31764705882352945,
         "tdist": 422.0,
         "tdist2": 422.0,
-        "type": "in-between",
+        "type": "step",
     },
     {
         "alt": 75.4,
@@ -173,7 +173,7 @@ EXPECTED_TRACES = [
         "speed": 0.05853658536585367,
         "tdist": 430.0,
         "tdist2": 430.0,
-        "type": "in-between",
+        "type": "step",
     },
     {
         "alt": 75.4,
@@ -186,7 +186,7 @@ EXPECTED_TRACES = [
         "speed": 0.15789473684210525,
         "tdist": 440.0,
         "tdist2": 440.0,
-        "type": "in-between",
+        "type": "step",
     },
     {
         "alt": 78.4,
@@ -199,7 +199,7 @@ EXPECTED_TRACES = [
         "speed": 0.384,
         "tdist": 448.0,
         "tdist2": 448.0,
-        "type": "in-between",
+        "type": "step",
     },
     {
         "alt": 47.4,
@@ -212,7 +212,7 @@ EXPECTED_TRACES = [
         "speed": 0.31764705882352945,
         "tdist": 454.0,
         "tdist2": 454.0,
-        "type": "in-between",
+        "type": "step",
     },
     {
         "alt": 80.4,
@@ -225,7 +225,7 @@ EXPECTED_TRACES = [
         "speed": 0.05610389610389611,
         "tdist": 460.0,
         "tdist2": 460.0,
-        "type": "in-between",
+        "type": "step",
     },
     {
         "alt": 79.4,
@@ -238,7 +238,7 @@ EXPECTED_TRACES = [
         "speed": 0.2384105960264901,
         "tdist": 470.0,
         "tdist2": 470.0,
-        "type": "in-between",
+        "type": "step",
     },
     {
         "alt": 79.4,
@@ -264,7 +264,7 @@ EXPECTED_TRACES = [
         "speed": 13.815,
         "tdist": 777.0,
         "tdist2": 307.0,
-        "type": "in-between",
+        "type": "step",
     },
     {
         "alt": 83.4,
@@ -277,7 +277,7 @@ EXPECTED_TRACES = [
         "speed": 0.5217391304347826,
         "tdist": 787.0,
         "tdist2": 317.0,
-        "type": "in-between",
+        "type": "step",
     },
     {
         "alt": 76.4,
@@ -290,7 +290,7 @@ EXPECTED_TRACES = [
         "speed": 0.7636363636363637,
         "tdist": 801.0,
         "tdist2": 331.0,
-        "type": "in-between",
+        "type": "step",
     },
     {
         "alt": 70.4,
@@ -303,7 +303,7 @@ EXPECTED_TRACES = [
         "speed": 0.3,
         "tdist": 807.0,
         "tdist2": 337.0,
-        "type": "in-between",
+        "type": "step",
     },
     {
         "alt": 65.4,
@@ -316,7 +316,7 @@ EXPECTED_TRACES = [
         "speed": 0.12663316582914574,
         "tdist": 814.0,
         "tdist2": 344.0,
-        "type": "in-between",
+        "type": "step",
     },
     {
         "alt": 78.4,
@@ -329,7 +329,7 @@ EXPECTED_TRACES = [
         "speed": 0.5142857142857142,
         "tdist": 824.0,
         "tdist2": 354.0,
-        "type": "in-between",
+        "type": "step",
     },
     {
         "alt": 78.4,
@@ -342,7 +342,7 @@ EXPECTED_TRACES = [
         "speed": 0.3652173913043479,
         "tdist": 831.0,
         "tdist2": 361.0,
-        "type": "in-between",
+        "type": "step",
     },
     {
         "alt": 82.4,
@@ -355,7 +355,7 @@ EXPECTED_TRACES = [
         "speed": 0.3230769230769231,
         "tdist": 838.0,
         "tdist2": 368.0,
-        "type": "in-between",
+        "type": "step",
     },
     {
         "alt": 67.4,
@@ -368,7 +368,7 @@ EXPECTED_TRACES = [
         "speed": 0.11145510835913312,
         "tdist": 848.0,
         "tdist2": 378.0,
-        "type": "in-between",
+        "type": "step",
     },
     {
         "alt": 75.4,
@@ -381,7 +381,7 @@ EXPECTED_TRACES = [
         "speed": 0.5538461538461539,
         "tdist": 858.0,
         "tdist2": 388.0,
-        "type": "in-between",
+        "type": "step",
     },
     {
         "alt": 73.4,
@@ -394,7 +394,7 @@ EXPECTED_TRACES = [
         "speed": 0.2465753424657534,
         "tdist": 863.0,
         "tdist2": 393.0,
-        "type": "in-between",
+        "type": "step",
     },
     {
         "alt": 67.4,
@@ -407,7 +407,7 @@ EXPECTED_TRACES = [
         "speed": 0.22291021671826625,
         "tdist": 883.0,
         "tdist2": 413.0,
-        "type": "in-between",
+        "type": "step",
     },
     {
         "alt": 64.4,
@@ -420,7 +420,7 @@ EXPECTED_TRACES = [
         "speed": 0.5210526315789474,
         "tdist": 894.0,
         "tdist2": 424.0,
-        "type": "in-between",
+        "type": "step",
     },
     {
         "alt": 67.4,
@@ -433,7 +433,7 @@ EXPECTED_TRACES = [
         "speed": 0.05070422535211268,
         "tdist": 901.0,
         "tdist2": 431.0,
-        "type": "in-between",
+        "type": "step",
     },
     {
         "alt": 76.4,
@@ -446,7 +446,7 @@ EXPECTED_TRACES = [
         "speed": 0.0407035175879397,
         "tdist": 910.0,
         "tdist2": 440.0,
-        "type": "in-between",
+        "type": "step",
     },
     {
         "alt": 78.4,
@@ -459,7 +459,7 @@ EXPECTED_TRACES = [
         "speed": 0.05120910384068279,
         "tdist": 920.0,
         "tdist2": 450.0,
-        "type": "in-between",
+        "type": "step",
     },
     {
         "alt": 68.4,
@@ -550,19 +550,19 @@ def test_adapt_traces():
         (
             [
                 {"type": "start"},
-                {"type": "in-between"},
+                {"type": "step"},
                 {"type": "sos"},
                 {"type": "sos"},
-                {"type": "in-between"},
+                {"type": "step"},
                 {"type": "sos"},
                 {"type": "sos"},
             ],
             [
                 {"type": "start"},
-                {"type": "in-between"},
+                {"type": "step"},
                 {"type": "sos-past"},
                 {"type": "sos-past"},
-                {"type": "in-between"},
+                {"type": "step"},
                 {"type": "sos"},
                 {"type": "sos"},
             ],
@@ -570,20 +570,20 @@ def test_adapt_traces():
         (
             [
                 {"type": "start"},
-                {"type": "in-between"},
+                {"type": "step"},
                 {"type": "sos"},
                 {"type": "sos"},
-                {"type": "in-between"},
+                {"type": "step"},
                 {"type": "sos"},
                 {"type": "sos"},
                 {"type": "end"},
             ],
             [
                 {"type": "start"},
-                {"type": "in-between"},
+                {"type": "step"},
                 {"type": "sos-past"},
                 {"type": "sos-past"},
-                {"type": "in-between"},
+                {"type": "step"},
                 {"type": "sos-past"},
                 {"type": "sos-past"},
                 {"type": "end"},

@@ -14,7 +14,7 @@ var journey = [],
     },
     marker_color = {
         "end": new_icon('green', 'normal'),
-        "in-between": new_icon('blue', 'small'),
+        "step": new_icon('blue', 'small'),
         "pause": new_icon('yellow', 'small'),
         "start": new_icon('yellow', 'normal'),
         "sos": new_icon('red', 'normal'),
@@ -60,7 +60,7 @@ var journey = [],
     };
 
 L.control.layers(maps).addTo(map);
-L.control.scale({imperial: false, position: 'topright'}).addTo(map,);
+L.control.scale({imperial: false, position: 'topright'}).addTo(map);
 
 traces.forEach(function(trace) {
     const position = {lat: trace.lat, lon: trace.lon};

@@ -73,7 +73,7 @@ def adapt_traces(traces):
         - tdist: total distance since the begining
         - tdist2: total distance since the pause, or the begining if none
         - ts: timestamp of the raw date
-        - type: start | end | pause | in-between | sos-past | sos
+        - type: start | end | pause | step | sos-past | sos
     """
     if not traces:
         return traces
@@ -125,7 +125,7 @@ def adapt_traces(traces):
                 total_distance_since_last_pause = 0.0
             else:
                 # Normal trace, we are moving
-                fmt_trace["type"] = "in-between"
+                fmt_trace["type"] = "step"
 
         fmt_traces.append(fmt_trace)
 
