@@ -3,6 +3,7 @@
 `2023-07-29`
 
 - Display the scale of the map (closes #13).
+- Add support for timezones, the default is *Europe/Paris*.
 
 
 ## 1.1.0

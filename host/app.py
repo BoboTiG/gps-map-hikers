@@ -5,8 +5,9 @@ Script maintained by Mickaël Schoentgen <contact@tiger-222.fr>.
 
 import json
 import time
+from datetime import datetime
 from pathlib import Path
-from time import sleep
+from zoneinfo import ZoneInfo
 
 from bottle import auth_basic, default_app, redirect, request, route, static_file, template
 
@@ -35,8 +36,13 @@ SLEEP_SEC = 2
 PICTURES.mkdir(exist_ok=True, parents=True)
 
 
+def get_timezone(folder: Path) -> ZoneInfo:
+    file = folder / "tz.txt"
+    return ZoneInfo(file.read_text().strip() if file.is_file() else "Europe/Paris")
+
+
 def is_authenticated_user(user, password):
-    sleep(SLEEP_SEC)
+    time.sleep(SLEEP_SEC)
     return (user == USER and password == PWD) or (password == PWD and user == USER)
 
 
@@ -45,12 +51,13 @@ def get_all_traces(folder=None):
     folder = folder or TRACES
     pictures = sorted((folder / "pictures").glob("*.*"))
     folder_prefix = str(folder)
+    tz = get_timezone(folder)
 
     traces = []
     for file in sorted(folder.glob("*.json")):
         data = json.loads(file.read_text())
         data["ts"] = int(file.stem)
-        data["date"] = time.strftime("%d/%m/%Y à %H:%M:%S", time.localtime(int(file.stem)))
+        data["date"] = datetime.fromtimestamp(int(file.stem), tz=tz).isoformat(sep=" ", timespec="seconds")
         data["pic"] = str(next((p for p in pictures if p.stem == file.stem), "")).removeprefix(folder_prefix)
         traces.append(data)
     return traces
@@ -63,7 +70,7 @@ def adapt_traces(traces):
 
     Trace data:
         - alt: altitude
-        - date: converted to a string at UTC+2
+        - date: converted to a string at expected timezone (see `get_timezone()`)
         - dist: distance since last trace
         - lat: latitude
         - lon: longitude
