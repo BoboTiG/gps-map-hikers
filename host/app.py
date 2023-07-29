@@ -29,7 +29,6 @@ TRACES = ROOT / "traces"
 PICTURES = TRACES / "pictures"
 SOS = ROOT / "sos"
 VIEWS = ROOT / "views"
-UTC_2 = 3600 * 2
 USER, PWD = (ROOT / "basic_auth.txt").read_text().strip().split(":", 1)
 SLEEP_SEC = 2
 
@@ -51,7 +50,7 @@ def get_all_traces(folder=None):
     for file in sorted(folder.glob("*.json")):
         data = json.loads(file.read_text())
         data["ts"] = int(file.stem)
-        data["date"] = time.strftime("%d/%m/%Y à %H:%M:%S", time.localtime(int(file.stem) + UTC_2))
+        data["date"] = time.strftime("%d/%m/%Y à %H:%M:%S", time.localtime(int(file.stem)))
         data["pic"] = str(next((p for p in pictures if p.stem == file.stem), "")).removeprefix(folder_prefix)
         traces.append(data)
     return traces
@@ -102,9 +101,6 @@ def adapt_traces(traces):
         if trace == first:
             # First trace
             fmt_trace["type"] = "start"
-        elif trace["dist"] + trace["speed"] + trace["alt"] == 0.0:
-            # No information, lets skip it then
-            continue
         else:
             total_distance += trace["dist"]
             total_distance_since_last_pause += trace["dist"]
