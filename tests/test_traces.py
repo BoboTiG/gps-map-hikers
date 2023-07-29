@@ -611,23 +611,23 @@ EXPECTED_TRACES_TRIP_NZ = [
 ]
 
 
-def test_get_all_traces_no_traces(tmp_path):
+def test_get_all_traces_no_traces(tmp_path: Path) -> None:
     assert get_all_traces(tmp_path) == []
 
 
 @pytest.mark.parametrize("trip, count", [(TRIP_FR, 37), (TRIP_NZ, 9)])
-def test_get_all_traces(trip, count):
+def test_get_all_traces(trip: Path, count: int) -> None:
     assert len(get_all_traces(trip)) == count
 
 
-def test_adapt_traces_no_traces():
+def test_adapt_traces_no_traces() -> None:
     assert adapt_traces([]) == []
 
 
 @pytest.mark.parametrize(
     "trip, expected_traces", [(TRIP_FR, EXPECTED_TRACES_TRIP_FR), (TRIP_NZ, EXPECTED_TRACES_TRIP_NZ)]
 )
-def test_adapt_traces(trip, expected_traces):
+def test_adapt_traces(trip: Path, expected_traces: list[dict]) -> None:
     for trace in adapt_traces(get_all_traces(trip)):
         print(f"{trace},")
 
@@ -729,5 +729,5 @@ def test_adapt_traces(trip, expected_traces):
         ),
     ],
 )
-def test_check_for_sos(traces, expected):
+def test_check_for_sos(traces: list[dict], expected: list[dict]) -> None:
     assert check_for_sos(traces) == expected

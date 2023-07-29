@@ -9,7 +9,7 @@ from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
-from bottle import auth_basic, default_app, redirect, request, route, static_file, template
+from bottle import HTTPResponse, auth_basic, default_app, redirect, request, route, static_file, template
 
 __version__ = "1.2.0"
 __author__ = "Mickaël Schoentgen"
@@ -41,12 +41,12 @@ def get_timezone(folder: Path) -> ZoneInfo:
     return ZoneInfo(file.read_text().strip() if file.is_file() else "Europe/Paris")
 
 
-def is_authenticated_user(user, password):
+def is_authenticated_user(user: str, password: str) -> bool:
     time.sleep(SLEEP_SEC)
-    return (user == USER and password == PWD) or (password == PWD and user == USER)
+    return user == USER and password == PWD
 
 
-def get_all_traces(folder=None):
+def get_all_traces(folder: Path | None = None) -> list[dict]:
     """Retrieve all recorded traces."""
     folder = folder or TRACES
     pictures = sorted((folder / "pictures").glob("*.*"))
@@ -63,7 +63,7 @@ def get_all_traces(folder=None):
     return traces
 
 
-def adapt_traces(traces):
+def adapt_traces(traces: list[dict]) -> list[dict]:
     """
     Adapt traces details.
     Traces without relevant data are ignored.
@@ -138,7 +138,7 @@ def adapt_traces(traces):
     return fmt_traces
 
 
-def check_for_sos(traces):
+def check_for_sos(traces: list[dict]) -> list[dict]:
     """
     Adapt traces for emergencies.
 
@@ -159,7 +159,7 @@ def check_for_sos(traces):
     return traces
 
 
-def fix_distance(traces):
+def fix_distance(traces: list[dict]) -> list[dict]:
     """
     Adapt traces distance.
 
@@ -174,7 +174,7 @@ def fix_distance(traces):
     return traces
 
 
-def fix_speed(traces):
+def fix_speed(traces: list[dict]) -> list[dict]:
     """
     Adapt traces speed.
 
@@ -191,31 +191,31 @@ def fix_speed(traces):
     return traces
 
 
-def emergency_ongoing():
+def emergency_ongoing() -> bool:
     """Check the current emergency state."""
     return SOS.is_file()
 
 
 @route("/assets/<file:path>", method="GET")
-def asset(file):
+def asset(file: str) -> HTTPResponse:
     """Get a resource file used by the website."""
     return static_file(file, root=ASSETS)
 
 
 @route("/favicon.png", method="GET")
-def favicon():
+def favicon() -> HTTPResponse:
     """Get the favicon file."""
     return static_file("favicon.png", root=ASSETS)
 
 
 @route("/robots.txt", method="GET")
-def robots():
+def robots() -> HTTPResponse:
     """Get the robots.txt file (for search engine crawlers)."""
     return static_file("robots.txt", root=ASSETS)
 
 
 @route("/", method="GET")
-def home():
+def home() -> str:
     """Display the home page with the map."""
     return template(
         "home",
@@ -227,7 +227,7 @@ def home():
 
 @route("/picture", method="GET")
 @auth_basic(is_authenticated_user)
-def picture_form():
+def picture_form() -> str:
     """Upload picture form."""
     if not (traces := get_all_traces()):
         redirect("/")
@@ -236,7 +236,7 @@ def picture_form():
 
 @route("/picture/upload", method="POST")
 @auth_basic(is_authenticated_user)
-def picture_upload():
+def picture_upload() -> None:
     """Upload a picture."""
     trace = request.forms["trace"]
     if not (TRACES / f"{trace}.json").is_file():
@@ -255,14 +255,14 @@ def picture_upload():
 
 
 @route("/pictures/<picture:path>", method="GET")
-def picture_get(picture):
+def picture_get(picture: str) -> HTTPResponse:
     """Get a picture file."""
     return static_file(picture, root=PICTURES)
 
 
 @route("/log", method="GET")
 @auth_basic(is_authenticated_user)
-def new_trace():
+def new_trace() -> None:
     """
     A new trace is sent for recording.
     All details are here: https://gpslogger.app/#usingthecustomurlfeature
@@ -293,7 +293,7 @@ def new_trace():
 
 @route("/ok", method="GET")
 @auth_basic(is_authenticated_user)
-def emergency_done():
+def emergency_done() -> None:
     """Stop the SOS signal."""
     SOS.unlink(missing_ok=True)
     redirect("/")
@@ -301,7 +301,7 @@ def emergency_done():
 
 @route("/sos", method="GET")
 @auth_basic(is_authenticated_user)
-def emergency():
+def emergency() -> None:
     """Start a SOS signal."""
     if not emergency_ongoing():
         SOS.write_text(time.strftime("%d/%m/%Y à %H:%M:%S", time.localtime(time.time())))

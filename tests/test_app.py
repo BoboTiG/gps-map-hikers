@@ -1,3 +1,4 @@
+from pathlib import Path
 from unittest.mock import patch
 
 import pytest
@@ -9,19 +10,19 @@ from host import app
 app.SLEEP_SEC = 0
 
 
-def test_asset():
+def test_asset() -> None:
     response = app.asset("css/images/layers.png")
     assert response.status_code == 200
     assert response.content_type == "image/png"
 
 
-def test_home_no_traces(tmp_path):
+def test_home_no_traces(tmp_path: Path) -> None:
     with patch("host.app.TRACES", tmp_path):
         content = app.home()
     assert "La carte sera affichée" in content
 
 
-def test_home(tmp_path):
+def test_home(tmp_path: Path) -> None:
     (tmp_path / "1689705170.json").write_text('{"alt": 0.0, "lat": 0.0, "lon": 0.0}')
     with patch("host.app.TRACES", tmp_path):
         content = app.home()
@@ -29,19 +30,19 @@ def test_home(tmp_path):
     assert "var traces = [" in content
 
 
-def test_robots():
+def test_robots() -> None:
     response = app.robots()
     assert response.status_code == 200
     assert response.content_type == "text/plain; charset=UTF-8"
 
 
-def test_favicon():
+def test_favicon() -> None:
     response = app.favicon()
     assert response.status_code == 200
     assert response.content_type == "image/png"
 
 
-def test_emergency():
+def test_emergency() -> None:
     assert not app.emergency_ongoing()
 
     with boddle(auth=(app.USER, app.PWD)), pytest.raises(HTTPResponse):
@@ -53,7 +54,7 @@ def test_emergency():
     assert not app.emergency_ongoing()
 
 
-def test_new_trace_already_present(tmp_path):
+def test_new_trace_already_present(tmp_path: Path) -> None:
     (tmp_path / "1689705170.json").write_text("")
     with (
         patch("host.app.TRACES", tmp_path),
@@ -62,7 +63,7 @@ def test_new_trace_already_present(tmp_path):
         app.new_trace()
 
 
-def test_new_trace(tmp_path):
+def test_new_trace(tmp_path: Path) -> None:
     with (
         patch("host.app.TRACES", tmp_path),
         boddle(
@@ -81,7 +82,7 @@ def test_new_trace(tmp_path):
     assert (tmp_path / "1689705170.json").is_file()
 
 
-def test_picture_form_no_traces(tmp_path):
+def test_picture_form_no_traces(tmp_path: Path) -> None:
     with (
         patch("host.app.TRACES", tmp_path),
         pytest.raises(HTTPResponse),
@@ -90,7 +91,7 @@ def test_picture_form_no_traces(tmp_path):
         app.picture_form()
 
 
-def test_picture_form(tmp_path):
+def test_picture_form(tmp_path: Path) -> None:
     (tmp_path / "1689705170.json").write_text('{"pic": "", "ts": 1689705170}')
 
     with (
@@ -102,7 +103,7 @@ def test_picture_form(tmp_path):
         assert '<form action="picture/upload"' in content
 
 
-def test_upload_picure_no_trace():
+def test_upload_picure_no_trace() -> None:
     with (
         pytest.raises(HTTPResponse),
         boddle(auth=(app.USER, app.PWD), params={"trace": "123"}),
@@ -110,7 +111,7 @@ def test_upload_picure_no_trace():
         app.picture_upload()
 
 
-def test_upload_picure(tmp_path):
+def test_upload_picure(tmp_path: Path) -> None:
     pytest.skip("boddle does not support mocking requests.files")
 
     pictures = tmp_path / "pictures"
@@ -132,7 +133,7 @@ def test_upload_picure(tmp_path):
     assert (pictures / "1689705170.jpg").is_file()
 
 
-def test_picture_get(tmp_path):
+def test_picture_get(tmp_path: Path) -> None:
     pictures = tmp_path / "pictures"
     pictures.mkdir()
     (pictures / "1689705170.jpg").write_bytes(b"data")

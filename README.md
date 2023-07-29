@@ -20,6 +20,11 @@ Details:
 - Force HTTPS: enabled
 - Web app type: Bottle
 
+### Security
+
+Several endpoints are protected by a user/password combination.
+Credentials are to be set in the `host/basic_auth.txt` file using that format: `user:password`.
+
 ## Development
 
 ### Installation
