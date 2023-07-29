@@ -10,7 +10,7 @@ from time import sleep
 
 from bottle import auth_basic, default_app, redirect, request, route, static_file, template
 
-__version__ = "1.1.0"
+__version__ = "1.2.0"
 __author__ = "Mickaël Schoentgen"
 __copyright__ = """
 Copyright (c) 2021-2023, Mickaël 'Tiger-222' Schoentgen

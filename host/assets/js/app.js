@@ -60,6 +60,7 @@ var journey = [],
     };
 
 L.control.layers(maps).addTo(map);
+L.control.scale({imperial: false, position: 'topright'}).addTo(map,);
 
 traces.forEach(function(trace) {
     const position = {lat: trace.lat, lon: trace.lon};

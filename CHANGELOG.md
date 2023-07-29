@@ -1,3 +1,10 @@
+## 1.2.0
+
+`2023-07-29`
+
+- Display the scale of the map (closes #13).
+
+
 ## 1.1.0
 
 `2023-07-20`
