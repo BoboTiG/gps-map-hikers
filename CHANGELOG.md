@@ -1,7 +1,8 @@
 ## 1.2.0
 
-`2023-07-29`
+`2023-08-02`
 
+- Add an option to toggle the display of markers with a media only, or all (closes #7).
 - Display the scale of the map (closes #13).
 - Add support for timezones, the default is *Europe/Paris*.
 - Disable the routing until a better algorithm is found (related to #10).
