@@ -108,16 +108,16 @@ traces.forEach(function(trace) {
     }
 });
 
-L.Routing.control({
-    waypoints: journey,
-    addWaypoints: false,  // Ne pas créer de nouveaux points lors d'un clic sur le trajet
-    createMarker: function() {},  // Ne pas remplacer nos icônes
-    lineOptions: {
-        styles: [{color: 'black', opacity: 0.15, weight: 9},
-                 {color: 'white',opacity: 0.8, weight: 6},
-                 {color: 'blue', opacity: 0.4, weight: 3}]
-    },
-}).addTo(map);
+// L.Routing.control({
+//     waypoints: journey,
+//     addWaypoints: false,  // Ne pas créer de nouveaux points lors d'un clic sur le trajet
+//     createMarker: function() {},  // Ne pas remplacer nos icônes
+//     lineOptions: {
+//         styles: [{color: 'black', opacity: 0.15, weight: 9},
+//                  {color: 'white',opacity: 0.8, weight: 6},
+//                  {color: 'blue', opacity: 0.4, weight: 3}]
+//     },
+// }).addTo(map);
 
 // Affichage jour/nuit suivant l'heure courante
 terminator = L.terminator().addTo(map);

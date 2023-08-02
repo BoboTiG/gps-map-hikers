@@ -4,8 +4,8 @@
 
 - Display the scale of the map (closes #13).
 - Add support for timezones, the default is *Europe/Paris*.
+- Disable the routing until a better algorithm is found (related to #10).
 - [dev] Add types annotations.
-
 
 ## 1.1.0
 
