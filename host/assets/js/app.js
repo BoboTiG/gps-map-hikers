@@ -37,7 +37,7 @@ var journey = [],
             pegmanControl: false,
             preferCanvas: true,
             rotate: false,
-            searchControl: false,
+            searchControl: {queryLang: 'fr_FR'},
             zoom: 13,
         }
     ),
