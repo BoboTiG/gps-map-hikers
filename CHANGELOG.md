@@ -1,9 +1,11 @@
 ## 1.2.0
 
-`2023-08-02`
+`2023-08-15`
 
 - Add an option to toggle the display of markers with a media only, or all (closes #7).
 - Display the scale of the map (closes #13).
+- Use new maps more appropriate to hiking (street, satellite [default], topo).
+- Add capability to lookup for addresses.
 - Add support for timezones, the default is *Europe/Paris*.
 - Disable the routing until a better algorithm is found (related to #10).
 - [dev] Add types annotations.
