@@ -5,7 +5,6 @@
     <title>Trek</title>
     <link href="favicon.png" rel="icon" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <link rel="stylesheet" href="assets/css/leaflet.css" />
     <link rel="stylesheet" href="assets/css/app.css" />
 </head>
 
@@ -44,7 +43,8 @@
     ];
 </script>
 <script src="assets/js/leaflet.js"></script>
-<!--<script src="assets/js/leaflet-routing-machine.min.js"></script>-->
+<script src="assets/js/leaflet-ui.js"></script>
+<script src="assets/js/leaflet-routing-machine.min.js"></script>
 <script src="assets/js/leaflet-terminator.js"></script>
 <script src="assets/js/app.js"></script>
 %else:

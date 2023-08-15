@@ -21,36 +21,26 @@ var journey = [],
         "sos-past": new_icon('red', 'small'),
     },
 
-    // Cartes
-    attrib = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    title_layer_options = {maxZoom: 19, updateWhenZooming: false, updateWhenIdle: true},
-    maps = {
-        'OpenStreetMap': L.tileLayer(
-            'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: attrib,
-                ...title_layer_options,
-            }
-        ),
-        'OpenStreetMap II': L.tileLayer(
-            'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
-                attribution: attrib,
-                ...title_layer_options,
-            }
-        ),
-        'CartoDB': L.tileLayer(
-            'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
-                attribution: attrib + ', map tiles bt <a href="http://cartodb.com/attributions">CartoDB</a>',
-                ...title_layer_options,
-            }
-        ),
-        'Watercolor': L.tileLayer(
-            'http://{s}.tile.stamen.com/watercolor/{z}/{x}/{y}.jpg', {
-                attribution: attrib + ', map tiles by <a href="http://stamen.com">Stamen Design</a>',
-                ...title_layer_options,
-            }
-        ),
-    },
-    map = L.map('map', {layers: maps['OpenStreetMap'], preferCanvas: true}).setView({lat: last.lat, lon: last.lon}, 13),
+    // Carte
+    map = L.map(
+        'map',
+        {
+            attributionControl: false,
+            center: [last.lat, last.lon],
+            editInOSMControl: false,
+            fullscreenControl: false,
+            gestureHandling: false,
+            locateControl: false,
+            mapTypeId: 'satellite',
+            mapTypeIds: ['streets', 'satellite', 'topo'],
+            minimapControl: false,
+            pegmanControl: false,
+            preferCanvas: true,
+            rotate: false,
+            searchControl: false,
+            zoom: 13,
+        }
+    ),
     is_int = function(n) {
         return n % 1 === 0;
     },
@@ -60,19 +50,21 @@ var journey = [],
     },
     markers = [],
     show_traces = function (with_media_only) {
+        // Remove current markers, if any
         markers.forEach(function(marker) {
             map.removeLayer(marker);
         });
 
         traces.forEach(function(trace) {
+            const position = {lat: trace.lat, lon: trace.lon};
+
+            journey.push(position);
+
             if (with_media_only && !trace.pic) {
                 return;
             }
 
-            const position = {lat: trace.lat, lon: trace.lon};
             let text = '<p style="text-align:center">';
-        
-            // journey.push(position);
         
             if (trace.type == 'sos') {
                 text += '<b class="blink red">SOS</b><br>';
@@ -110,9 +102,6 @@ var journey = [],
             let marker = L.marker(position, {icon: marker_color[trace.type]}).addTo(map);
             markers.push(marker);
             marker.bindPopup(text);
-            if (trace == last) {
-                marker.openPopup();
-            }
         })
     };
 
@@ -144,6 +133,7 @@ L.Control.OptionMarkerWithMediaOnly = L.Control.extend({
 L.control.option_marker_with_media_only = function(opts) {
     return new L.Control.OptionMarkerWithMediaOnly(opts);
 }
+L.control.option_marker_with_media_only({ position: 'topright' }).addTo(map);
 
 // Affichage jour/nuit suivant l'heure courante
 terminator = L.terminator().addTo(map);
@@ -151,10 +141,7 @@ map.addEventListener('zoomstart movestart popupopen', function(e) {
     terminator.setTime();
 });
 
-L.control.option_marker_with_media_only({ position: 'topright' }).addTo(map);
-L.control.layers(maps).addTo(map);
-L.control.scale({imperial: false, position: 'topright'}).addTo(map);
-
+// Afficher les marqueurs
 show_traces(false);
 
 // L.Routing.control({
@@ -166,4 +153,17 @@ show_traces(false);
 //                  {color: 'white',opacity: 0.8, weight: 6},
 //                  {color: 'blue', opacity: 0.4, weight: 3}]
 //     },
+//     router: new L.Routing.OSRMv1({
+//         serviceUrl: 'https://router.project-osrm.org/route/v1',
+//         profile: 'trip',
+//         timeout: 30 * 1000,
+//         routingOptions: {
+//             alternatives: false,
+//             steps: false,
+//             a: 'b',
+//         },
+//         useHints: false,
+//         suppressDemoServerWarning: true,
+//         language: 'en',
+//     }),
 // }).addTo(map);
