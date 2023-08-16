@@ -37,7 +37,6 @@ var journey = [],
             pegmanControl: false,
             preferCanvas: true,
             rotate: false,
-            searchControl: {queryLang: 'fr_FR'},
             zoom: 13,
         }
     ),
@@ -107,33 +106,38 @@ var journey = [],
 
 // Option - Afficher seulement les marqueurs ayant un média
 L.Control.OptionMarkerWithMediaOnly = L.Control.extend({
+    options: {
+        position: 'bottomright',
+        title: {
+            'all': '📷',
+            'with-media-only': '📸',
+        },
+    },
     onAdd: function(map) {
-        let div = L.DomUtil.create('div'),
-            a = L.DomUtil.create('a');
-        const txt_all = '📷',
-            txt_media_only = '📸';
+        let container = L.DomUtil.create('div', 'leaflet-control-opt-marker-with-media leaflet-bar leaflet-control');
+        
+        this.link = L.DomUtil.create('a', 'leaflet-bar-part', container);
+        this.link.title = "Afficher seulement les marqueurs contenant un media";
+        this.link.text = this.options.title['all'];
 
-        a.title = "Afficher seulement les marqueurs contenant un media";
-        a.style.fontSize = '2em';
-        a.style.cursor = 'pointer';
-        a.text = txt_all;
-        L.DomEvent.on(a, 'click', function() {
-            if (a.text == txt_all) {
-                a.text = txt_media_only;
-                show_traces(true);
-            } else {
-                a.text = txt_all;
-                show_traces(false);
-            }
-        });
-        div.appendChild(a);
-        return div;
-    }
+        L.DomEvent.on(this.link, 'click', this._click, this);
+
+        return container;
+    },
+    _click: function (e) {
+        L.DomEvent.stopPropagation(e);
+        L.DomEvent.preventDefault(e);
+
+        if (this.link.text == this.options.title['all']) {
+            this.link.text = this.options.title['with-media-only'];
+            show_traces(true);
+        } else {
+            this.link.text = this.options.title['all'];
+            show_traces(false);
+        }
+    },
 });
-L.control.option_marker_with_media_only = function(opts) {
-    return new L.Control.OptionMarkerWithMediaOnly(opts);
-}
-L.control.option_marker_with_media_only({ position: 'topright' }).addTo(map);
+map.addControl(new L.Control.OptionMarkerWithMediaOnly());
 
 // Affichage jour/nuit suivant l'heure courante
 terminator = L.terminator().addTo(map);

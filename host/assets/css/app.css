@@ -101,3 +101,8 @@ form {
         margin: 0.5em;
     }
 }
+
+.leaflet-control-opt-marker-with-media a {
+    font-size: 2em;
+    cursor: pointer;
+}
