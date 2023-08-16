@@ -1,6 +1,11 @@
 # GPS Map for Hikers
 
-Beautiful map using [Leaflet](https://leafletjs.com/) and [GPSLogger](https://github.com/mendhak/gpslogger).
+Beautiful map using those awesome free and open-source softwares:
+
+- [GPSLogger](https://github.com/mendhak/gpslogger)
+- [Leaflet](https://leafletjs.com/)
+  - [Leaflet.Terminator](https://github.com/joergdietrich/Leaflet.Terminator) (day/night regions)
+  - [leaflet-ui](https://github.com/Raruto/leaflet-ui) (UI)
 
 ## Adventure
 
