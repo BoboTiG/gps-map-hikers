@@ -3,6 +3,7 @@
 `2023-08-15`
 
 - Add an option to toggle the display of markers with a media only, or all (closes #7).
+- Add an option to toggle the display of the legend.
 - Display the scale of the map (closes #13).
 - Use new maps more appropriate to hiking (street, satellite [default], topo).
 - Add capability to lookup for addresses.

@@ -30,6 +30,7 @@ var journey = [],
             editInOSMControl: false,
             fullscreenControl: false,
             gestureHandling: false,
+            loadingControl: false,
             locateControl: false,
             mapTypeId: 'satellite',
             mapTypeIds: ['streets', 'satellite', 'topo'],
@@ -37,6 +38,7 @@ var journey = [],
             pegmanControl: false,
             preferCanvas: true,
             rotate: false,
+            zoomControl: false,
             zoom: 13,
         }
     ),
@@ -108,17 +110,18 @@ var journey = [],
 L.Control.OptionMarkerWithMediaOnly = L.Control.extend({
     options: {
         position: 'bottomright',
-        title: {
+        text: {
             'all': '📷',
             'with-media-only': '📸',
         },
+        title: 'Afficher seulement les marqueurs contenant un media',
     },
     onAdd: function(map) {
-        let container = L.DomUtil.create('div', 'leaflet-control-opt-marker-with-media leaflet-bar leaflet-control');
+        let container = L.DomUtil.create('div', 'leaflet-control-custom-option-2x leaflet-bar leaflet-control');
         
         this.link = L.DomUtil.create('a', 'leaflet-bar-part', container);
-        this.link.title = "Afficher seulement les marqueurs contenant un media";
-        this.link.text = this.options.title['all'];
+        this.link.title = this.options.title;
+        this.link.text = this.options.text['all'];
 
         L.DomEvent.on(this.link, 'click', this._click, this);
 
@@ -128,16 +131,54 @@ L.Control.OptionMarkerWithMediaOnly = L.Control.extend({
         L.DomEvent.stopPropagation(e);
         L.DomEvent.preventDefault(e);
 
-        if (this.link.text == this.options.title['all']) {
-            this.link.text = this.options.title['with-media-only'];
+        if (this.link.text == this.options.text['all']) {
+            this.link.text = this.options.text['with-media-only'];
             show_traces(true);
         } else {
-            this.link.text = this.options.title['all'];
+            this.link.text = this.options.text['all'];
             show_traces(false);
         }
     },
 });
 map.addControl(new L.Control.OptionMarkerWithMediaOnly());
+
+// Option - Afficher la légende
+L.Control.OptionToggleLegend = L.Control.extend({
+    options: {
+        position: 'bottomright',
+        text: {
+            on: 'On',
+            off: 'Off',
+        },
+        title: 'Afficher/cacher la légende',
+    },
+    onAdd: function(map) {
+        let container = L.DomUtil.create('div', 'leaflet-control-custom-option leaflet-bar leaflet-control');
+        
+        this.link = L.DomUtil.create('a', 'leaflet-bar-part', container);
+        this.link.title = this.options.title;
+        this.link.text = this.options.text['off'];
+
+        this.legend = document.getElementById('legend');
+
+        L.DomEvent.on(this.link, 'click', this._click, this);
+
+        return container;
+    },
+    _click: function (e) {
+        L.DomEvent.stopPropagation(e);
+        L.DomEvent.preventDefault(e);
+
+        if (this.link.text == this.options.text['on']) {
+            this.link.text = this.options.text['off'];
+            this.legend.style.display = 'none';
+        } else {
+            this.link.text = this.options.text['on'];
+            this.legend.style.display = 'block';
+        }
+    },
+});
+map.addControl(new L.Control.OptionToggleLegend());
 
 // Affichage jour/nuit suivant l'heure courante
 terminator = L.terminator().addTo(map);

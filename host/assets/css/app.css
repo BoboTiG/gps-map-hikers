@@ -50,6 +50,7 @@ abbr:hover {
 }
 
 #legend {
+    display: none;
     border-top: 1px outset rgba(0, 0, 0, 0.8);
     border-right: 1px outset rgba(0, 0, 0, 0.8);
     position: absolute;
@@ -102,7 +103,11 @@ form {
     }
 }
 
-.leaflet-control-opt-marker-with-media a {
-    font-size: 2em;
+.leaflet-control-custom-option a,
+.leaflet-control-custom-option-2x a {
     cursor: pointer;
+}
+
+.leaflet-control-custom-option-2x a {
+    font-size: 2em;
 }
