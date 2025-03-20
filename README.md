@@ -1,5 +1,7 @@
 # GPS Map for Hikers
 
+[![Patreon](https://img.shields.io/badge/Patreon-F96854?style=for-the-badge&logo=patreon&logoColor=white)](https://www.patreon.com/mschoentgen)
+
 Beautiful map using those awesome free and open-source softwares:
 
 - [GPSLogger](https://github.com/mendhak/gpslogger)
